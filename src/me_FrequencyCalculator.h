@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-10-15
+  Last mod.: 2025-10-16
 */
 
 /*
@@ -33,6 +33,11 @@
 
 namespace me_FrequencyCalculator
 {
+  /*
+    Duration as clock slowdown and number of clock cycles
+
+    For number of cycles 0 means 1, 1 means 2 etc.
+  */
   struct THardwareDuration
   {
     TUint_1 PrescalerPowOfTwo;
@@ -63,13 +68,9 @@ namespace me_FrequencyCalculator
   THardwareSpec GetSpec_Counter2();
   THardwareSpec GetSpec_Counter3();
   THardwareSpec GetSpec_Uart();
-
-  TBool CalculateHardwareDuration_Counter1(THardwareDuration *, TUint_4);
-  TBool CalculateHardwareDuration_Counter2(THardwareDuration *, TUint_4);
-  TBool CalculateHardwareDuration_Counter3(THardwareDuration *, TUint_4);
-  TBool CalculateHardwareDuration_Uart(THardwareDuration *, TUint_4);
 }
 
 /*
   2025-10-15
+  2025-10-16
 */

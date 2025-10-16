@@ -41,11 +41,23 @@ TBool CheckSpec(
   Represent frequency as hardware duration
 */
 TBool me_FrequencyCalculator::CalculateHardwareDuration(
-  THardwareDuration * HwDur [[gnu::unused]],
-  TUint_4 Freq_Hz [[gnu::unused]],
+  THardwareDuration * HwDur,
+  TUint_4 Freq_Hz,
   THardwareSpec HwSpec
 )
 {
+  /*
+    If clock ticked 1000 times per second, for delay of 10 milli-seconds
+    we need count to 10.
+
+    But clock ticks faster and maximum counter value is limited.
+    So this code.
+
+    Also clock speed (BaseFreq) is another parameter.
+    But for practical reasons it's used as constant.
+    Or else we should mention it in hardware duration record.
+  */
+
   const TUint_4 BaseFreq = F_CPU;
 
   TUint_4 CounterMaxValue;

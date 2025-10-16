@@ -40,26 +40,18 @@ void TestFreq(
 {
   me_FrequencyCalculator::THardwareDuration HwDur;
 
-  Console.Print("(");
-  Console.Indent();
-
   PrintFrequency(Freq_Hz);
 
   if (!me_FrequencyCalculator::CalculateHardwareDuration(&HwDur, Freq_Hz, HwSpec))
     Console.Print("Duration calculation failed");
   else
     PrintHardwareDuration(HwDur);
-
-  Console.Unindent();
-  Console.Print(")");
 }
 
-const TUint_1 NumTestFreqs = 9;
+const TUint_1 NumTestFreqs = 7;
 TUint_4 FreqsTestSet[NumTestFreqs] =
   {
-    50,
     100,
-    500,
     1000,
     5000,
     10000,
@@ -80,8 +72,13 @@ void TestCalculator(
 
   Console.Indent();
 
+  Console.Print("");
+
   for (TUint_1 Index = 0; Index < NumTestFreqs; ++Index)
+  {
     TestFreq(FreqsTestSet[Index], HwSpec);
+    Console.Print("");
+  }
 
   Console.Unindent();
   Console.Print(")");
@@ -118,8 +115,6 @@ void RunTest()
 void setup()
 {
   Console.Init();
-
-  me_Uart::Init(9600);
 
   Console.Print("[me_FrequencyCalculator] test");
   Console.Indent();
