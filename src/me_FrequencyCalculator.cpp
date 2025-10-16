@@ -9,8 +9,6 @@
 
 #include <me_BaseTypes.h>
 
-#include <me_Console.h>
-
 using namespace me_FrequencyCalculator;
 
 // [Internal] Check hardware spec
@@ -48,18 +46,14 @@ TBool me_FrequencyCalculator::CalculateHardwareDuration(
   THardwareSpec HwSpec
 )
 {
-  const TUint_4 BaseFreq = 20000000L; //F_CPU;
+  const TUint_4 BaseFreq = F_CPU;
+
+  TUint_4 CounterMaxValue;
+  TUint_1 Index;
   TUint_4 ScaledFreq;
 
   if (!CheckSpec(&HwSpec))
     return false;
-
-  Console.Write("BaseFreq");
-  Console.Print(BaseFreq);
-  Console.EndLine();
-
-  TUint_4 CounterMaxValue;
-  TUint_1 Index;
 
   CounterMaxValue = (1L << HwSpec.CounterNumBits);
 
@@ -74,14 +68,6 @@ TBool me_FrequencyCalculator::CalculateHardwareDuration(
     {
       HwDur->PrescalerPowOfTwo = HwSpec.PrescalerPowsOfTwo[Index];
       HwDur->CounterLimit = ScaledFreq / Freq_Hz - 1;
-
-      Console.Write("ScaledFreq");
-      Console.Print(ScaledFreq);
-      Console.EndLine();
-
-      Console.Write("CountTo");
-      Console.Print(HwDur->CounterLimit + 1);
-      Console.EndLine();
 
       return true;
     }
