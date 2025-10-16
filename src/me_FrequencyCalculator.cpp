@@ -5,6 +5,18 @@
   Last mod.: 2025-10-16
 */
 
+/*
+  Imagine we can do only 10 ms delays and asked for 27 ms delay.
+
+  We can't do it exactly, so our options are:
+
+    * Fail because we can't do it exactly
+    * Do 20 ms delay, we never overshoot
+    * Do 30 ms delay because it's closes match
+
+  This implementation is doing closest match calculations.
+*/
+
 #include <me_FrequencyCalculator.h>
 
 #include <me_BaseTypes.h>
@@ -12,7 +24,7 @@
 using namespace me_FrequencyCalculator;
 
 // [Internal] Check hardware spec
-TBool CheckSpec(
+static TBool CheckSpec(
   THardwareSpec * Spec
 )
 {
@@ -33,6 +45,28 @@ TBool CheckSpec(
       if (Spec->PrescalerPowsOfTwo[Index] <= Spec->PrescalerPowsOfTwo[Index - 1])
         return false;
   }
+
+  return true;
+}
+
+/*
+  [Internal] Calculate how many units can be fit in given length
+
+  Rounds result to nearest integer value.
+*/
+static TBool GetNumUnitsForLength(
+  TUint_4 * NumUnits,
+  TUint_4 Length,
+  TUint_4 UnitSize
+)
+{
+  if (Length == 0)
+    return false;
+
+  if (UnitSize == 0)
+    return false;
+
+  *NumUnits = ((2 * Length / UnitSize) + 1) / 2;
 
   return true;
 }
@@ -63,6 +97,7 @@ TBool me_FrequencyCalculator::CalculateHardwareDuration(
   TUint_4 CounterMaxValue;
   TUint_1 Index;
   TUint_4 ScaledFreq;
+  TUint_4 NumUnits;
 
   if (!CheckSpec(&HwSpec))
     return false;
@@ -73,21 +108,27 @@ TBool me_FrequencyCalculator::CalculateHardwareDuration(
   {
     ScaledFreq = BaseFreq >> HwSpec.PrescalerPowsOfTwo[Index];
 
-    if (
-      (ScaledFreq > Freq_Hz) &&
-      (ScaledFreq / Freq_Hz < CounterMaxValue)
-    )
-    {
-      HwDur->PrescalerPowOfTwo = HwSpec.PrescalerPowsOfTwo[Index];
-      HwDur->CounterLimit = ScaledFreq / Freq_Hz - 1;
+    if (!GetNumUnitsForLength(&NumUnits, ScaledFreq, Freq_Hz))
+      continue;
 
-      return true;
-    }
+    if (NumUnits == 0)
+      continue;
+
+    if (NumUnits > CounterMaxValue)
+      continue;
+
+    HwDur->PrescalerPowOfTwo = HwSpec.PrescalerPowsOfTwo[Index];
+    HwDur->CounterLimit = NumUnits - 1;
+
+    return true;
   }
 
   return false;
 }
 
+/*
+  Return counter 1 specs
+*/
 THardwareSpec me_FrequencyCalculator::GetSpec_Counter1()
 {
   THardwareSpec HwSpec;
@@ -104,6 +145,9 @@ THardwareSpec me_FrequencyCalculator::GetSpec_Counter1()
   return HwSpec;
 }
 
+/*
+  Return counter 2 specs
+*/
 THardwareSpec me_FrequencyCalculator::GetSpec_Counter2()
 {
   THardwareSpec HwSpec;
@@ -120,6 +164,9 @@ THardwareSpec me_FrequencyCalculator::GetSpec_Counter2()
   return HwSpec;
 }
 
+/*
+  Return counter 3 specs
+*/
 THardwareSpec me_FrequencyCalculator::GetSpec_Counter3()
 {
   THardwareSpec HwSpec;
@@ -138,6 +185,9 @@ THardwareSpec me_FrequencyCalculator::GetSpec_Counter3()
   return HwSpec;
 }
 
+/*
+  Return USART module specs
+*/
 THardwareSpec me_FrequencyCalculator::GetSpec_Uart()
 {
   THardwareSpec HwSpec;

@@ -48,16 +48,17 @@ void TestFreq(
     PrintHardwareDuration(HwDur);
 }
 
-const TUint_1 NumTestFreqs = 7;
+const TUint_1 NumTestFreqs = 8;
 TUint_4 FreqsTestSet[NumTestFreqs] =
   {
     100,
+    500,
     1000,
     5000,
     10000,
     50000,
     100000,
-    500000
+    500000,
   };
 
 void TestCalculator(
