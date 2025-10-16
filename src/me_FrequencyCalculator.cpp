@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-10-15
+  Last mod.: 2025-10-16
 */
 
 #include <me_FrequencyCalculator.h>
@@ -39,6 +39,9 @@ TBool CheckSpec(
   return true;
 }
 
+/*
+  Represent frequency as hardware duration
+*/
 TBool me_FrequencyCalculator::CalculateHardwareDuration(
   THardwareDuration * HwDur [[gnu::unused]],
   TUint_4 Freq_Hz [[gnu::unused]],
@@ -87,10 +90,7 @@ TBool me_FrequencyCalculator::CalculateHardwareDuration(
   return false;
 }
 
-TBool me_FrequencyCalculator::CalculateHardwareDuration_Counter1(
-  THardwareDuration * HwDur,
-  TUint_4 Freq_Hz
-)
+THardwareSpec me_FrequencyCalculator::GetSpec_Counter1()
 {
   THardwareSpec HwSpec;
 
@@ -103,13 +103,10 @@ TBool me_FrequencyCalculator::CalculateHardwareDuration_Counter1(
 
   HwSpec.CounterNumBits = 8;
 
-  return CalculateHardwareDuration(HwDur, Freq_Hz, HwSpec);
+  return HwSpec;
 }
 
-TBool me_FrequencyCalculator::CalculateHardwareDuration_Counter2(
-  THardwareDuration * HwDur,
-  TUint_4 Freq_Hz
-)
+THardwareSpec me_FrequencyCalculator::GetSpec_Counter2()
 {
   THardwareSpec HwSpec;
 
@@ -122,13 +119,10 @@ TBool me_FrequencyCalculator::CalculateHardwareDuration_Counter2(
 
   HwSpec.CounterNumBits = 16;
 
-  return CalculateHardwareDuration(HwDur, Freq_Hz, HwSpec);
+  return HwSpec;
 }
 
-TBool me_FrequencyCalculator::CalculateHardwareDuration_Counter3(
-  THardwareDuration * HwDur,
-  TUint_4 Freq_Hz
-)
+THardwareSpec me_FrequencyCalculator::GetSpec_Counter3()
 {
   THardwareSpec HwSpec;
 
@@ -143,13 +137,10 @@ TBool me_FrequencyCalculator::CalculateHardwareDuration_Counter3(
 
   HwSpec.CounterNumBits = 8;
 
-  return CalculateHardwareDuration(HwDur, Freq_Hz, HwSpec);
+  return HwSpec;
 }
 
-TBool me_FrequencyCalculator::CalculateHardwareDuration_Uart(
-  THardwareDuration * HwDur,
-  TUint_4 Freq_Hz
-)
+THardwareSpec me_FrequencyCalculator::GetSpec_Uart()
 {
   THardwareSpec HwSpec;
 
@@ -159,9 +150,10 @@ TBool me_FrequencyCalculator::CalculateHardwareDuration_Uart(
 
   HwSpec.CounterNumBits = 12;
 
-  return CalculateHardwareDuration(HwDur, Freq_Hz, HwSpec);
+  return HwSpec;
 }
 
 /*
   2025-10-15
+  2025-10-16
 */

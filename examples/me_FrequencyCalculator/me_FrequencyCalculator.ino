@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-10-15
+  Last mod.: 2025-10-16
 */
 
 #include <me_FrequencyCalculator.h>
@@ -11,11 +11,6 @@
 #include <me_Console.h>
 
 #include <me_Uart.h>
-
-typedef TBool (*TCalculator)(
-  me_FrequencyCalculator::THardwareDuration *,
-  TUint_4
-);
 
 void PrintHardwareDuration(
   me_FrequencyCalculator::THardwareDuration HwDur
@@ -40,7 +35,7 @@ void PrintFrequency(
 
 void TestFreq(
   TUint_4 Freq_Hz,
-  TCalculator Calc
+  me_FrequencyCalculator::THardwareSpec HwSpec
 )
 {
   me_FrequencyCalculator::THardwareDuration HwDur;
@@ -50,7 +45,7 @@ void TestFreq(
 
   PrintFrequency(Freq_Hz);
 
-  if (!Calc(&HwDur, Freq_Hz))
+  if (!me_FrequencyCalculator::CalculateHardwareDuration(&HwDur, Freq_Hz, HwSpec))
     Console.Print("Duration calculation failed");
   else
     PrintHardwareDuration(HwDur);
@@ -75,7 +70,7 @@ TUint_4 FreqsTestSet[NumTestFreqs] =
 
 void TestCalculator(
   TAsciiz CalcName,
-  TCalculator Calc
+  me_FrequencyCalculator::THardwareSpec HwSpec
 )
 {
   Console.Write("(");
@@ -86,7 +81,7 @@ void TestCalculator(
   Console.Indent();
 
   for (TUint_1 Index = 0; Index < NumTestFreqs; ++Index)
-    TestFreq(FreqsTestSet[Index], Calc);
+    TestFreq(FreqsTestSet[Index], HwSpec);
 
   Console.Unindent();
   Console.Print(")");
@@ -94,30 +89,22 @@ void TestCalculator(
 
 void TestCounter1()
 {
-  TCalculator Calc = me_FrequencyCalculator::CalculateHardwareDuration_Counter1;
-
-  TestCalculator("Counter 1", Calc);
+  TestCalculator("Counter 1", me_FrequencyCalculator::GetSpec_Counter1());
 }
 
 void TestCounter2()
 {
-  TCalculator Calc = me_FrequencyCalculator::CalculateHardwareDuration_Counter2;
-
-  TestCalculator("Counter 2", Calc);
+  TestCalculator("Counter 2", me_FrequencyCalculator::GetSpec_Counter2());
 }
 
 void TestCounter3()
 {
-  TCalculator Calc = me_FrequencyCalculator::CalculateHardwareDuration_Counter3;
-
-  TestCalculator("Counter 3", Calc);
+  TestCalculator("Counter 3", me_FrequencyCalculator::GetSpec_Counter3());
 }
 
 void TestUart()
 {
-  TCalculator Calc = me_FrequencyCalculator::CalculateHardwareDuration_Uart;
-
-  TestCalculator("UART", Calc);
+  TestCalculator("UART", me_FrequencyCalculator::GetSpec_Uart());
 }
 
 void RunTest()
@@ -147,4 +134,5 @@ void loop()
 
 /*
   2025-10-15
+  2025-10-16
 */

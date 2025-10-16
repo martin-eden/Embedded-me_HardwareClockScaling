@@ -59,6 +59,11 @@ namespace me_FrequencyCalculator
     THardwareSpec HwSpec
   );
 
+  THardwareSpec GetSpec_Counter1();
+  THardwareSpec GetSpec_Counter2();
+  THardwareSpec GetSpec_Counter3();
+  THardwareSpec GetSpec_Uart();
+
   TBool CalculateHardwareDuration_Counter1(THardwareDuration *, TUint_4);
   TBool CalculateHardwareDuration_Counter2(THardwareDuration *, TUint_4);
   TBool CalculateHardwareDuration_Counter3(THardwareDuration *, TUint_4);
