@@ -53,7 +53,7 @@ namespace me_FrequencyCalculator
 
     Prescalers array should store ascending values.
   */
-  struct THardwareSpec
+  struct THardwareDurationOptions
   {
     TUint_1 NumPrescalerValues;
     TUint_1 PrescalerPowsOfTwo[MaxPrescalerValues];
@@ -64,7 +64,7 @@ namespace me_FrequencyCalculator
   TBool CalculateHardwareDuration(
     THardwareDuration * HwDur,
     TUint_4 Freq_Hz,
-    THardwareSpec HwSpec
+    THardwareDurationOptions HwOpts
   );
 
   // Convert hardware duration to frequency

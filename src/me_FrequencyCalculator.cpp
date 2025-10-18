@@ -27,7 +27,7 @@ const TUint_4 BaseFreq = F_CPU;
 
 // [Internal] Check hardware spec
 static TBool CheckSpec(
-  THardwareSpec * Spec
+  THardwareDurationOptions * Spec
 )
 {
   TUint_1 Index;
@@ -79,7 +79,7 @@ static TBool GetNumUnitsForLength(
 TBool me_FrequencyCalculator::CalculateHardwareDuration(
   THardwareDuration * HwDur,
   TUint_4 Freq_Hz,
-  THardwareSpec HwSpec
+  THardwareDurationOptions HwSpec
 )
 {
   /*

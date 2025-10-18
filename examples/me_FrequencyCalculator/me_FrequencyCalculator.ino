@@ -35,7 +35,7 @@ void PrintFrequency(
 
 void TestFreq(
   TUint_4 Freq_Hz,
-  me_FrequencyCalculator::THardwareSpec HwSpec
+  me_FrequencyCalculator::THardwareDurationOptions HwSpec
 )
 {
   me_FrequencyCalculator::THardwareDuration HwDur;
@@ -88,7 +88,7 @@ TUint_4 FreqsTestSet[NumTestFreqs] =
 
 void TestCalculator(
   TAsciiz CalcName,
-  me_FrequencyCalculator::THardwareSpec HwSpec
+  me_FrequencyCalculator::THardwareDurationOptions HwSpec
 )
 {
   Console.Write("(");

@@ -9,9 +9,30 @@
   [me_FrequencyCalculator] provides data structure and methods
   for hardware time scaling. Not data.
 
-  Each module that uses that calculator should know it's specs.
-  But for test purposes, we'll provide it here.
+  Each module that uses this calculator should know it's specs.
 */
+
+  /*
+    Well, that won't work
+
+    Counters module don't want this yet. It does not deal with
+    frequencies, it provides interface to hardware counters.
+    Which is wider scope but less abstractions.
+
+    UART module don't need this yet. It uses frequency for speed
+    setting. But speed setting is one of several things it does.
+    It calculates frequency with similar formulas but not exposing
+    abstraction for them.
+
+    Frequency generator deals with frequencies. But it's
+    implementation uses just one counter of three available.
+    And it can't switch to another externally specified
+    counter (yet?).
+
+    So looks like it's gonna become another code heap which
+    noone wants to host and maintain but everyone wants to use.
+    Like [me_StreamsCollection].
+  */
 
 #pragma once
 
@@ -19,18 +40,18 @@
 
 namespace me_FrequencySpecs
 {
-  me_FrequencyCalculator::THardwareSpec GetSpec_Counter1();
-  me_FrequencyCalculator::THardwareSpec GetSpec_Counter2();
-  me_FrequencyCalculator::THardwareSpec GetSpec_Counter3();
-  me_FrequencyCalculator::THardwareSpec GetSpec_Uart();
+  me_FrequencyCalculator::THardwareDurationOptions GetSpec_Counter1();
+  me_FrequencyCalculator::THardwareDurationOptions GetSpec_Counter2();
+  me_FrequencyCalculator::THardwareDurationOptions GetSpec_Counter3();
+  me_FrequencyCalculator::THardwareDurationOptions GetSpec_Uart();
 }
 
 /*
   Return counter 1 specs
 */
-me_FrequencyCalculator::THardwareSpec me_FrequencySpecs::GetSpec_Counter1()
+me_FrequencyCalculator::THardwareDurationOptions me_FrequencySpecs::GetSpec_Counter1()
 {
-  me_FrequencyCalculator::THardwareSpec HwSpec;
+  me_FrequencyCalculator::THardwareDurationOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 5;
   HwSpec.PrescalerPowsOfTwo[0] = 0;
@@ -47,9 +68,9 @@ me_FrequencyCalculator::THardwareSpec me_FrequencySpecs::GetSpec_Counter1()
 /*
   Return counter 2 specs
 */
-me_FrequencyCalculator::THardwareSpec me_FrequencySpecs::GetSpec_Counter2()
+me_FrequencyCalculator::THardwareDurationOptions me_FrequencySpecs::GetSpec_Counter2()
 {
-  me_FrequencyCalculator::THardwareSpec HwSpec;
+  me_FrequencyCalculator::THardwareDurationOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 5;
   HwSpec.PrescalerPowsOfTwo[0] = 0;
@@ -66,9 +87,9 @@ me_FrequencyCalculator::THardwareSpec me_FrequencySpecs::GetSpec_Counter2()
 /*
   Return counter 3 specs
 */
-me_FrequencyCalculator::THardwareSpec me_FrequencySpecs::GetSpec_Counter3()
+me_FrequencyCalculator::THardwareDurationOptions me_FrequencySpecs::GetSpec_Counter3()
 {
-  me_FrequencyCalculator::THardwareSpec HwSpec;
+  me_FrequencyCalculator::THardwareDurationOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 7;
   HwSpec.PrescalerPowsOfTwo[0] = 0;
@@ -87,9 +108,9 @@ me_FrequencyCalculator::THardwareSpec me_FrequencySpecs::GetSpec_Counter3()
 /*
   Return USART module specs
 */
-me_FrequencyCalculator::THardwareSpec me_FrequencySpecs::GetSpec_Uart()
+me_FrequencyCalculator::THardwareDurationOptions me_FrequencySpecs::GetSpec_Uart()
 {
-  me_FrequencyCalculator::THardwareSpec HwSpec;
+  me_FrequencyCalculator::THardwareDurationOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 2;
   HwSpec.PrescalerPowsOfTwo[0] = 3;
