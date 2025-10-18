@@ -34,6 +34,17 @@
     Like [me_StreamsCollection].
   */
 
+  /*
+    Okay, I have idea
+
+    We rename module from "Frequency Calculator" to
+    "Hardware Duration Options" making it data-centric.
+
+    So intention will become provision of available hardware duration
+    options. And functions to calculate hardware duration from
+    frequency and back will become just companion functions.
+  */
+
 #pragma once
 
 #include <me_FrequencyCalculator.h>
