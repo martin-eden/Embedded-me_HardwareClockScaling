@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-10-16
+  Last mod.: 2025-10-18
 */
 
 /*
@@ -29,6 +29,8 @@
   C language is wrong tool for this but we have no options now.
 */
 
+#pragma once
+
 #include <me_BaseTypes.h>
 
 namespace me_FrequencyCalculator
@@ -36,7 +38,7 @@ namespace me_FrequencyCalculator
   /*
     Duration as clock slowdown and number of clock cycles
 
-    For number of cycles 0 means 1, 1 means 2 etc.
+    For number of cycles: 0 means 1, 1 means 2 etc.
   */
   struct THardwareDuration
   {
@@ -58,19 +60,22 @@ namespace me_FrequencyCalculator
     TUint_1 CounterNumBits;
   };
 
+  // Convert frequency to hardware duration
   TBool CalculateHardwareDuration(
     THardwareDuration * HwDur,
     TUint_4 Freq_Hz,
     THardwareSpec HwSpec
   );
 
-  THardwareSpec GetSpec_Counter1();
-  THardwareSpec GetSpec_Counter2();
-  THardwareSpec GetSpec_Counter3();
-  THardwareSpec GetSpec_Uart();
+  // Convert hardware duration to frequency
+  TBool CalculateFrequency(
+    TUint_4 * Freq_Hz,
+    THardwareDuration HwDur
+  );
 }
 
 /*
   2025-10-15
   2025-10-16
+  2025-10-18
 */

@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-10-16
+  Last mod.: 2025-10-18
 */
 
 /*
@@ -22,6 +22,8 @@
 #include <me_BaseTypes.h>
 
 using namespace me_FrequencyCalculator;
+
+const TUint_4 BaseFreq = F_CPU;
 
 // [Internal] Check hardware spec
 static TBool CheckSpec(
@@ -92,12 +94,10 @@ TBool me_FrequencyCalculator::CalculateHardwareDuration(
     Or else we should mention it in hardware duration record.
   */
 
-  const TUint_4 BaseFreq = F_CPU;
-
   TUint_4 CounterMaxValue;
   TUint_1 Index;
   TUint_4 ScaledFreq;
-  TUint_4 NumUnits;
+  TUint_4 CounterLimit;
 
   if (!CheckSpec(&HwSpec))
     return false;
@@ -108,17 +108,17 @@ TBool me_FrequencyCalculator::CalculateHardwareDuration(
   {
     ScaledFreq = BaseFreq >> HwSpec.PrescalerPowsOfTwo[Index];
 
-    if (!GetNumUnitsForLength(&NumUnits, ScaledFreq, Freq_Hz))
+    if (!GetNumUnitsForLength(&CounterLimit, ScaledFreq, Freq_Hz))
       continue;
 
-    if (NumUnits == 0)
+    if (CounterLimit == 0)
       continue;
 
-    if (NumUnits > CounterMaxValue)
+    if (CounterLimit > CounterMaxValue)
       continue;
 
     HwDur->PrescalerPowOfTwo = HwSpec.PrescalerPowsOfTwo[Index];
-    HwDur->CounterLimit = NumUnits - 1;
+    HwDur->CounterLimit = CounterLimit - 1;
 
     return true;
   }
@@ -127,78 +127,36 @@ TBool me_FrequencyCalculator::CalculateHardwareDuration(
 }
 
 /*
-  Return counter 1 specs
+  Represent hardware duration as frequency
 */
-THardwareSpec me_FrequencyCalculator::GetSpec_Counter1()
+TBool me_FrequencyCalculator::CalculateFrequency(
+  TUint_4 * Freq_Hz,
+  THardwareDuration HwDur
+)
 {
-  THardwareSpec HwSpec;
+  /*
+    It's easier. Imagine we want to get our 16 MHz back.
+    It means no prescaler and no scaling. Then add adjustments.
+  */
 
-  HwSpec.NumPrescalerValues = 5;
-  HwSpec.PrescalerPowsOfTwo[0] = 0;
-  HwSpec.PrescalerPowsOfTwo[1] = 3;
-  HwSpec.PrescalerPowsOfTwo[2] = 6;
-  HwSpec.PrescalerPowsOfTwo[3] = 8;
-  HwSpec.PrescalerPowsOfTwo[4] = 10;
+  TUint_4 ScaledFreq;
+  TUint_4 CounterLimit;
 
-  HwSpec.CounterNumBits = 8;
+  ScaledFreq = BaseFreq >> HwDur.PrescalerPowOfTwo;
+  CounterLimit = (TUint_4) HwDur.CounterLimit + 1;
 
-  return HwSpec;
-}
+  /*
+    Freq_Hz = ScaledFreq / CounterLimit
 
-/*
-  Return counter 2 specs
-*/
-THardwareSpec me_FrequencyCalculator::GetSpec_Counter2()
-{
-  THardwareSpec HwSpec;
+      27 / 10 = 2
+      20 / 7 = 2
 
-  HwSpec.NumPrescalerValues = 5;
-  HwSpec.PrescalerPowsOfTwo[0] = 0;
-  HwSpec.PrescalerPowsOfTwo[1] = 3;
-  HwSpec.PrescalerPowsOfTwo[2] = 6;
-  HwSpec.PrescalerPowsOfTwo[3] = 8;
-  HwSpec.PrescalerPowsOfTwo[4] = 10;
+      We don't like this undershooting. We'll use rounding again.
+  */
+  if (!GetNumUnitsForLength(Freq_Hz, ScaledFreq, CounterLimit))
+    return false;
 
-  HwSpec.CounterNumBits = 16;
-
-  return HwSpec;
-}
-
-/*
-  Return counter 3 specs
-*/
-THardwareSpec me_FrequencyCalculator::GetSpec_Counter3()
-{
-  THardwareSpec HwSpec;
-
-  HwSpec.NumPrescalerValues = 7;
-  HwSpec.PrescalerPowsOfTwo[0] = 0;
-  HwSpec.PrescalerPowsOfTwo[1] = 3;
-  HwSpec.PrescalerPowsOfTwo[2] = 5;
-  HwSpec.PrescalerPowsOfTwo[3] = 6;
-  HwSpec.PrescalerPowsOfTwo[4] = 7;
-  HwSpec.PrescalerPowsOfTwo[5] = 8;
-  HwSpec.PrescalerPowsOfTwo[6] = 10;
-
-  HwSpec.CounterNumBits = 8;
-
-  return HwSpec;
-}
-
-/*
-  Return USART module specs
-*/
-THardwareSpec me_FrequencyCalculator::GetSpec_Uart()
-{
-  THardwareSpec HwSpec;
-
-  HwSpec.NumPrescalerValues = 2;
-  HwSpec.PrescalerPowsOfTwo[0] = 3;
-  HwSpec.PrescalerPowsOfTwo[1] = 4;
-
-  HwSpec.CounterNumBits = 12;
-
-  return HwSpec;
+  return true;
 }
 
 /*
