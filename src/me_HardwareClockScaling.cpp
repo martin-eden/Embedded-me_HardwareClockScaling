@@ -82,18 +82,6 @@ TBool me_HardwareClockScaling::CalculateHardwareDuration(
   TClockScalingOptions HwSpec
 )
 {
-  /*
-    If clock ticked 1000 times per second, for delay of 10 milli-seconds
-    we need count to 10.
-
-    But clock ticks faster and maximum counter value is limited.
-    So this code.
-
-    Also clock speed (BaseFreq) is another parameter.
-    But for practical reasons it's used as constant.
-    Or else we should mention it in hardware duration record.
-  */
-
   TUint_4 CounterMaxValue;
   TUint_1 Index;
   TUint_4 ScaledFreq;
@@ -134,25 +122,12 @@ TBool me_HardwareClockScaling::CalculateFrequency(
   TClockScale HwDur
 )
 {
-  /*
-    It's easier. Imagine we want to get our 16 MHz back.
-    It means no prescaler and no scaling. Then add adjustments.
-  */
-
   TUint_4 ScaledFreq;
   TUint_4 CounterLimit;
 
   ScaledFreq = BaseFreq >> HwDur.Prescale_PowOfTwo;
   CounterLimit = (TUint_4) HwDur.CounterLimit + 1;
 
-  /*
-    Freq_Hz = ScaledFreq / CounterLimit
-
-      27 / 10 = 2
-      20 / 7 = 2
-
-      We don't like this undershooting. We'll use rounding again.
-  */
   if (!GetNumUnitsForLength(Freq_Hz, ScaledFreq, CounterLimit))
     return false;
 
