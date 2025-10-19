@@ -6,15 +6,15 @@
 */
 
 /*
-  Imagine we can do only 10 ms delays and asked for 27 ms delay.
+  This implementation is doing closest match calculations
+
+  Imagine we can do only 10 s delays and asked for 27 s delay.
 
   We can't do it exactly, so our options are:
 
     * Fail because we can't do it exactly
-    * Do 20 ms delay, we never overshoot
-    * Do 30 ms delay because it's closes match
-
-  This implementation is doing closest match calculations.
+    * Do 20 s delay, we never overshoot
+    * Do 30 s delay because it's closest match
 */
 
 #include <me_HardwareClockScaling.h>
@@ -35,11 +35,11 @@ static TBool CheckSpec(
   if (Spec->NumPrescalerValues == 0)
     return false;
 
-  if (Spec->CounterNumBits > 16)
-    return false;
-
   for (Index = 0; Index < Spec->NumPrescalerValues; ++Index)
   {
+    if (Spec->CounterNumBits > 16)
+      return false;
+
     if (Spec->PrescalerPowsOfTwo[Index] > 16)
       return false;
 
@@ -114,6 +114,17 @@ TBool me_HardwareClockScaling::CalculateHardwareDuration(
   return false;
 }
 
+// [Internal] Check scale
+static TBool CheckScale(
+  TClockScale Scale
+)
+{
+  if (Scale.Prescale_PowOfTwo > 16)
+    return false;
+
+  return true;
+}
+
 /*
   Represent hardware duration as frequency
 */
@@ -124,6 +135,9 @@ TBool me_HardwareClockScaling::CalculateFrequency(
 {
   TUint_4 ScaledFreq;
   TUint_4 CounterLimit;
+
+  if (!CheckScale(HwDur))
+    return false;
 
   ScaledFreq = BaseFreq >> HwDur.Prescale_PowOfTwo;
   CounterLimit = (TUint_4) HwDur.CounterLimit + 1;
@@ -137,4 +151,5 @@ TBool me_HardwareClockScaling::CalculateFrequency(
 /*
   2025-10-15
   2025-10-16
+  2025-10-19
 */
