@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-10-18
+  Last mod.: 2025-10-19
 */
 
 /*
@@ -17,7 +17,7 @@
   This implementation is doing closest match calculations.
 */
 
-#include <me_FrequencyCalculator.h>
+#include <me_HardwareClockScaling.h>
 
 #include <me_BaseTypes.h>
 

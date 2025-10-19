@@ -1,16 +1,16 @@
-// [me_FrequencyCalculator] test
+// [me_HardwareClockScaling] test
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-10-18
+  Last mod.: 2025-10-19
 */
 
-#include <me_FrequencyCalculator.h>
+#include <me_HardwareClockScaling.h>
 
 #include <me_BaseTypes.h>
 #include <me_Console.h>
 #include <me_DebugPrints.h>
-#include "me_FrequencySpecs.hpp" // test data
+#include "me_ScalingSpecs.hpp" // test data
 
 void PrintHardwareDuration(
   me_FrequencyCalculator::THardwareDuration HwDur

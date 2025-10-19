@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-10-18
+  Last mod.: 2025-10-19
 */
 
 /*
@@ -47,7 +47,7 @@
 
 #pragma once
 
-#include <me_FrequencyCalculator.h>
+#include <me_HardwareClockScaling.h>
 
 namespace me_FrequencySpecs
 {
