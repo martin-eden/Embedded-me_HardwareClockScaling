@@ -33,7 +33,7 @@
 
 #include <me_BaseTypes.h>
 
-namespace me_FrequencyCalculator
+namespace me_HardwareClockScaling
 {
   /*
     Duration as clock slowdown and number of clock cycles

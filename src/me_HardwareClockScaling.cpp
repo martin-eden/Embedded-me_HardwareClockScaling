@@ -21,7 +21,7 @@
 
 #include <me_BaseTypes.h>
 
-using namespace me_FrequencyCalculator;
+using namespace me_HardwareClockScaling;
 
 const TUint_4 BaseFreq = F_CPU;
 
@@ -76,7 +76,7 @@ static TBool GetNumUnitsForLength(
 /*
   Represent frequency as hardware duration
 */
-TBool me_FrequencyCalculator::CalculateHardwareDuration(
+TBool me_HardwareClockScaling::CalculateHardwareDuration(
   THardwareDuration * HwDur,
   TUint_4 Freq_Hz,
   THardwareDurationOptions HwSpec
@@ -129,7 +129,7 @@ TBool me_FrequencyCalculator::CalculateHardwareDuration(
 /*
   Represent hardware duration as frequency
 */
-TBool me_FrequencyCalculator::CalculateFrequency(
+TBool me_HardwareClockScaling::CalculateFrequency(
   TUint_4 * Freq_Hz,
   THardwareDuration HwDur
 )

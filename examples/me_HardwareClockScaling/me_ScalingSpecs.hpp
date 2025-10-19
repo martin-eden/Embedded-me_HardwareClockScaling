@@ -6,7 +6,7 @@
 */
 
 /*
-  [me_FrequencyCalculator] provides data structure and methods
+  [me_HardwareClockScaling] provides data structure and methods
   for hardware time scaling. Not data.
 
   Each module that uses this calculator should know it's specs.
@@ -51,18 +51,18 @@
 
 namespace me_FrequencySpecs
 {
-  me_FrequencyCalculator::THardwareDurationOptions GetSpec_Counter1();
-  me_FrequencyCalculator::THardwareDurationOptions GetSpec_Counter2();
-  me_FrequencyCalculator::THardwareDurationOptions GetSpec_Counter3();
-  me_FrequencyCalculator::THardwareDurationOptions GetSpec_Uart();
+  me_HardwareClockScaling::THardwareDurationOptions GetSpec_Counter1();
+  me_HardwareClockScaling::THardwareDurationOptions GetSpec_Counter2();
+  me_HardwareClockScaling::THardwareDurationOptions GetSpec_Counter3();
+  me_HardwareClockScaling::THardwareDurationOptions GetSpec_Uart();
 }
 
 /*
   Return counter 1 specs
 */
-me_FrequencyCalculator::THardwareDurationOptions me_FrequencySpecs::GetSpec_Counter1()
+me_HardwareClockScaling::THardwareDurationOptions me_FrequencySpecs::GetSpec_Counter1()
 {
-  me_FrequencyCalculator::THardwareDurationOptions HwSpec;
+  me_HardwareClockScaling::THardwareDurationOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 5;
   HwSpec.PrescalerPowsOfTwo[0] = 0;
@@ -79,9 +79,9 @@ me_FrequencyCalculator::THardwareDurationOptions me_FrequencySpecs::GetSpec_Coun
 /*
   Return counter 2 specs
 */
-me_FrequencyCalculator::THardwareDurationOptions me_FrequencySpecs::GetSpec_Counter2()
+me_HardwareClockScaling::THardwareDurationOptions me_FrequencySpecs::GetSpec_Counter2()
 {
-  me_FrequencyCalculator::THardwareDurationOptions HwSpec;
+  me_HardwareClockScaling::THardwareDurationOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 5;
   HwSpec.PrescalerPowsOfTwo[0] = 0;
@@ -98,9 +98,9 @@ me_FrequencyCalculator::THardwareDurationOptions me_FrequencySpecs::GetSpec_Coun
 /*
   Return counter 3 specs
 */
-me_FrequencyCalculator::THardwareDurationOptions me_FrequencySpecs::GetSpec_Counter3()
+me_HardwareClockScaling::THardwareDurationOptions me_FrequencySpecs::GetSpec_Counter3()
 {
-  me_FrequencyCalculator::THardwareDurationOptions HwSpec;
+  me_HardwareClockScaling::THardwareDurationOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 7;
   HwSpec.PrescalerPowsOfTwo[0] = 0;
@@ -119,9 +119,9 @@ me_FrequencyCalculator::THardwareDurationOptions me_FrequencySpecs::GetSpec_Coun
 /*
   Return USART module specs
 */
-me_FrequencyCalculator::THardwareDurationOptions me_FrequencySpecs::GetSpec_Uart()
+me_HardwareClockScaling::THardwareDurationOptions me_FrequencySpecs::GetSpec_Uart()
 {
-  me_FrequencyCalculator::THardwareDurationOptions HwSpec;
+  me_HardwareClockScaling::THardwareDurationOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 2;
   HwSpec.PrescalerPowsOfTwo[0] = 3;

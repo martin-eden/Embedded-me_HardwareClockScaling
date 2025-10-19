@@ -13,7 +13,7 @@
 #include "me_ScalingSpecs.hpp" // test data
 
 void PrintHardwareDuration(
-  me_FrequencyCalculator::THardwareDuration HwDur
+  me_HardwareClockScaling::THardwareDuration HwDur
 )
 {
   Console.Write("Hardware duration:");
@@ -35,15 +35,15 @@ void PrintFrequency(
 
 void TestFreq(
   TUint_4 Freq_Hz,
-  me_FrequencyCalculator::THardwareDurationOptions HwSpec
+  me_HardwareClockScaling::THardwareDurationOptions HwSpec
 )
 {
-  me_FrequencyCalculator::THardwareDuration HwDur;
+  me_HardwareClockScaling::THardwareDuration HwDur;
   TUint_4 RealFreq_Hz;
 
   PrintFrequency("Wished frequency (Hz):", Freq_Hz);
 
-  if (!me_FrequencyCalculator::CalculateHardwareDuration(&HwDur, Freq_Hz, HwSpec))
+  if (!me_HardwareClockScaling::CalculateHardwareDuration(&HwDur, Freq_Hz, HwSpec))
   {
     Console.Print("Duration calculation failed");
 
@@ -51,7 +51,7 @@ void TestFreq(
   }
   PrintHardwareDuration(HwDur);
 
-  if (!me_FrequencyCalculator::CalculateFrequency(&RealFreq_Hz, HwDur))
+  if (!me_HardwareClockScaling::CalculateFrequency(&RealFreq_Hz, HwDur))
   {
     Console.Print("Frequency calculation failed");
 
@@ -88,7 +88,7 @@ TUint_4 FreqsTestSet[NumTestFreqs] =
 
 void TestCalculator(
   TAsciiz CalcName,
-  me_FrequencyCalculator::THardwareDurationOptions HwSpec
+  me_HardwareClockScaling::THardwareDurationOptions HwSpec
 )
 {
   Console.Write("(");
@@ -142,7 +142,7 @@ void setup()
 {
   Console.Init();
 
-  Console.Print("[me_FrequencyCalculator] test");
+  Console.Print("[me_HardwareClockScaling] test");
   Console.Indent();
   RunTest();
   Console.Unindent();
