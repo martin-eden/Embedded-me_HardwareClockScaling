@@ -49,20 +49,20 @@
 
 #include <me_HardwareClockScaling.h>
 
-namespace me_FrequencySpecs
+namespace me_ScalingSpecs
 {
-  me_HardwareClockScaling::THardwareDurationOptions GetSpec_Counter1();
-  me_HardwareClockScaling::THardwareDurationOptions GetSpec_Counter2();
-  me_HardwareClockScaling::THardwareDurationOptions GetSpec_Counter3();
-  me_HardwareClockScaling::THardwareDurationOptions GetSpec_Uart();
+  me_HardwareClockScaling::TClockScalingOptions GetSpec_Counter1();
+  me_HardwareClockScaling::TClockScalingOptions GetSpec_Counter2();
+  me_HardwareClockScaling::TClockScalingOptions GetSpec_Counter3();
+  me_HardwareClockScaling::TClockScalingOptions GetSpec_Uart();
 }
 
 /*
   Return counter 1 specs
 */
-me_HardwareClockScaling::THardwareDurationOptions me_FrequencySpecs::GetSpec_Counter1()
+me_HardwareClockScaling::TClockScalingOptions me_ScalingSpecs::GetSpec_Counter1()
 {
-  me_HardwareClockScaling::THardwareDurationOptions HwSpec;
+  me_HardwareClockScaling::TClockScalingOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 5;
   HwSpec.PrescalerPowsOfTwo[0] = 0;
@@ -79,9 +79,9 @@ me_HardwareClockScaling::THardwareDurationOptions me_FrequencySpecs::GetSpec_Cou
 /*
   Return counter 2 specs
 */
-me_HardwareClockScaling::THardwareDurationOptions me_FrequencySpecs::GetSpec_Counter2()
+me_HardwareClockScaling::TClockScalingOptions me_ScalingSpecs::GetSpec_Counter2()
 {
-  me_HardwareClockScaling::THardwareDurationOptions HwSpec;
+  me_HardwareClockScaling::TClockScalingOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 5;
   HwSpec.PrescalerPowsOfTwo[0] = 0;
@@ -98,9 +98,9 @@ me_HardwareClockScaling::THardwareDurationOptions me_FrequencySpecs::GetSpec_Cou
 /*
   Return counter 3 specs
 */
-me_HardwareClockScaling::THardwareDurationOptions me_FrequencySpecs::GetSpec_Counter3()
+me_HardwareClockScaling::TClockScalingOptions me_ScalingSpecs::GetSpec_Counter3()
 {
-  me_HardwareClockScaling::THardwareDurationOptions HwSpec;
+  me_HardwareClockScaling::TClockScalingOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 7;
   HwSpec.PrescalerPowsOfTwo[0] = 0;
@@ -119,9 +119,9 @@ me_HardwareClockScaling::THardwareDurationOptions me_FrequencySpecs::GetSpec_Cou
 /*
   Return USART module specs
 */
-me_HardwareClockScaling::THardwareDurationOptions me_FrequencySpecs::GetSpec_Uart()
+me_HardwareClockScaling::TClockScalingOptions me_ScalingSpecs::GetSpec_Uart()
 {
-  me_HardwareClockScaling::THardwareDurationOptions HwSpec;
+  me_HardwareClockScaling::TClockScalingOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 2;
   HwSpec.PrescalerPowsOfTwo[0] = 3;

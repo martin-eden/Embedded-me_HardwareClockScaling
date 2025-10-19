@@ -36,13 +36,13 @@
 namespace me_HardwareClockScaling
 {
   /*
-    Duration as clock slowdown and number of clock cycles
+    Clock slowdown and number of clock cycles
 
     For number of cycles: 0 means 1, 1 means 2 etc.
   */
-  struct THardwareDuration
+  struct TClockScale
   {
-    TUint_1 PrescalerPowOfTwo;
+    TUint_1 Prescale_PowOfTwo;
     TUint_2 CounterLimit;
   };
 
@@ -53,7 +53,7 @@ namespace me_HardwareClockScaling
 
     Prescalers array should store ascending values.
   */
-  struct THardwareDurationOptions
+  struct TClockScalingOptions
   {
     TUint_1 NumPrescalerValues;
     TUint_1 PrescalerPowsOfTwo[MaxPrescalerValues];
@@ -62,15 +62,15 @@ namespace me_HardwareClockScaling
 
   // Convert frequency to hardware duration
   TBool CalculateHardwareDuration(
-    THardwareDuration * HwDur,
+    TClockScale * HwDur,
     TUint_4 Freq_Hz,
-    THardwareDurationOptions HwOpts
+    TClockScalingOptions HwOpts
   );
 
   // Convert hardware duration to frequency
   TBool CalculateFrequency(
     TUint_4 * Freq_Hz,
-    THardwareDuration HwDur
+    TClockScale HwDur
   );
 }
 

@@ -13,12 +13,12 @@
 #include "me_ScalingSpecs.hpp" // test data
 
 void PrintHardwareDuration(
-  me_HardwareClockScaling::THardwareDuration HwDur
+  me_HardwareClockScaling::TClockScale HwDur
 )
 {
   Console.Write("Hardware duration:");
   Console.Write("(");
-  Console.Print(HwDur.PrescalerPowOfTwo);
+  Console.Print(HwDur.Prescale_PowOfTwo);
   Console.Print(HwDur.CounterLimit);
   Console.Write(")");
   Console.EndLine();
@@ -35,10 +35,10 @@ void PrintFrequency(
 
 void TestFreq(
   TUint_4 Freq_Hz,
-  me_HardwareClockScaling::THardwareDurationOptions HwSpec
+  me_HardwareClockScaling::TClockScalingOptions HwSpec
 )
 {
-  me_HardwareClockScaling::THardwareDuration HwDur;
+  me_HardwareClockScaling::TClockScale HwDur;
   TUint_4 RealFreq_Hz;
 
   PrintFrequency("Wished frequency (Hz):", Freq_Hz);
@@ -88,7 +88,7 @@ TUint_4 FreqsTestSet[NumTestFreqs] =
 
 void TestCalculator(
   TAsciiz CalcName,
-  me_HardwareClockScaling::THardwareDurationOptions HwSpec
+  me_HardwareClockScaling::TClockScalingOptions HwSpec
 )
 {
   Console.Write("(");
@@ -112,22 +112,22 @@ void TestCalculator(
 
 void TestCounter1()
 {
-  TestCalculator("Counter 1", me_FrequencySpecs::GetSpec_Counter1());
+  TestCalculator("Counter 1", me_ScalingSpecs::GetSpec_Counter1());
 }
 
 void TestCounter2()
 {
-  TestCalculator("Counter 2", me_FrequencySpecs::GetSpec_Counter2());
+  TestCalculator("Counter 2", me_ScalingSpecs::GetSpec_Counter2());
 }
 
 void TestCounter3()
 {
-  TestCalculator("Counter 3", me_FrequencySpecs::GetSpec_Counter3());
+  TestCalculator("Counter 3", me_ScalingSpecs::GetSpec_Counter3());
 }
 
 void TestUart()
 {
-  TestCalculator("UART", me_FrequencySpecs::GetSpec_Uart());
+  TestCalculator("UART", me_ScalingSpecs::GetSpec_Uart());
 }
 
 void RunTest()
