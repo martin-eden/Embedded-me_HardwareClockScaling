@@ -59,7 +59,7 @@ void TestFreq(
   PrintFrequency("Real frequency (Hz):", RealFreq_Hz);
 }
 
-/*
+//*
 // Testing spectrum base
 const TUint_1 NumTestFreqs = 8;
 TUint_4 FreqsTestSet[NumTestFreqs] =
@@ -73,8 +73,9 @@ TUint_4 FreqsTestSet[NumTestFreqs] =
     100000,
     500000,
   };
-*/
+//*/
 
+/*
 // Demo of non-exact frequencies
 const TUint_1 NumTestFreqs = 4;
 TUint_4 FreqsTestSet[NumTestFreqs] =
@@ -84,6 +85,7 @@ TUint_4 FreqsTestSet[NumTestFreqs] =
     57600,
     115200,
   };
+//*/
 
 void TestCalculator(
   TAsciiz CalcName,
