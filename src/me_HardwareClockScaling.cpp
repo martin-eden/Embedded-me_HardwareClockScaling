@@ -27,24 +27,24 @@ const TUint_4 BaseFreq = F_CPU;
 
 // [Internal] Check hardware spec
 static TBool CheckSpec(
-  TClockScalingOptions * Spec
+  TClockScalingOptions * ScaleOpts
 )
 {
   TUint_1 Index;
 
-  if (Spec->NumPrescalerValues == 0)
+  if (ScaleOpts->NumPrescalerValues == 0)
     return false;
 
-  for (Index = 0; Index < Spec->NumPrescalerValues; ++Index)
+  for (Index = 0; Index < ScaleOpts->NumPrescalerValues; ++Index)
   {
-    if (Spec->CounterNumBits > 16)
+    if (ScaleOpts->CounterNumBits > 16)
       return false;
 
-    if (Spec->PrescalerPowsOfTwo[Index] > 16)
+    if (ScaleOpts->Prescales_PowOfTwo[Index] > 16)
       return false;
 
     if (Index > 0)
-      if (Spec->PrescalerPowsOfTwo[Index] <= Spec->PrescalerPowsOfTwo[Index - 1])
+      if (ScaleOpts->Prescales_PowOfTwo[Index] <= ScaleOpts->Prescales_PowOfTwo[Index - 1])
         return false;
   }
 
@@ -76,10 +76,10 @@ static TBool GetNumUnitsForLength(
 /*
   Represent frequency as hardware duration
 */
-TBool me_HardwareClockScaling::CalculateHardwareDuration(
-  TClockScale * HwDur,
+TBool me_HardwareClockScaling::CalculateClockScale(
+  TClockScale * Scale,
   TUint_4 Freq_Hz,
-  TClockScalingOptions HwSpec
+  TClockScalingOptions ScaleOpts
 )
 {
   TUint_4 CounterMaxValue;
@@ -87,14 +87,14 @@ TBool me_HardwareClockScaling::CalculateHardwareDuration(
   TUint_4 ScaledFreq;
   TUint_4 CounterLimit;
 
-  if (!CheckSpec(&HwSpec))
+  if (!CheckSpec(&ScaleOpts))
     return false;
 
-  CounterMaxValue = (1L << HwSpec.CounterNumBits);
+  CounterMaxValue = (1L << ScaleOpts.CounterNumBits);
 
-  for (Index = 0; Index < HwSpec.NumPrescalerValues; ++Index)
+  for (Index = 0; Index < ScaleOpts.NumPrescalerValues; ++Index)
   {
-    ScaledFreq = BaseFreq >> HwSpec.PrescalerPowsOfTwo[Index];
+    ScaledFreq = BaseFreq >> ScaleOpts.Prescales_PowOfTwo[Index];
 
     if (!GetNumUnitsForLength(&CounterLimit, ScaledFreq, Freq_Hz))
       continue;
@@ -105,8 +105,8 @@ TBool me_HardwareClockScaling::CalculateHardwareDuration(
     if (CounterLimit > CounterMaxValue)
       continue;
 
-    HwDur->Prescale_PowOfTwo = HwSpec.PrescalerPowsOfTwo[Index];
-    HwDur->CounterLimit = CounterLimit - 1;
+    Scale->Prescale_PowOfTwo = ScaleOpts.Prescales_PowOfTwo[Index];
+    Scale->CounterLimit = CounterLimit - 1;
 
     return true;
   }
@@ -130,17 +130,17 @@ static TBool CheckScale(
 */
 TBool me_HardwareClockScaling::CalculateFrequency(
   TUint_4 * Freq_Hz,
-  TClockScale HwDur
+  TClockScale Scale
 )
 {
   TUint_4 ScaledFreq;
   TUint_4 CounterLimit;
 
-  if (!CheckScale(HwDur))
+  if (!CheckScale(Scale))
     return false;
 
-  ScaledFreq = BaseFreq >> HwDur.Prescale_PowOfTwo;
-  CounterLimit = (TUint_4) HwDur.CounterLimit + 1;
+  ScaledFreq = BaseFreq >> Scale.Prescale_PowOfTwo;
+  CounterLimit = (TUint_4) Scale.CounterLimit + 1;
 
   if (!GetNumUnitsForLength(Freq_Hz, ScaledFreq, CounterLimit))
     return false;

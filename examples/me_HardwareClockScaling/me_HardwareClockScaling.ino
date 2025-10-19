@@ -35,7 +35,7 @@ void PrintFrequency(
 
 void TestFreq(
   TUint_4 Freq_Hz,
-  me_HardwareClockScaling::TClockScalingOptions HwSpec
+  me_HardwareClockScaling::TClockScalingOptions ScalingOpts
 )
 {
   me_HardwareClockScaling::TClockScale HwDur;
@@ -43,7 +43,7 @@ void TestFreq(
 
   PrintFrequency("Wished frequency (Hz):", Freq_Hz);
 
-  if (!me_HardwareClockScaling::CalculateHardwareDuration(&HwDur, Freq_Hz, HwSpec))
+  if (!me_HardwareClockScaling::CalculateClockScale(&HwDur, Freq_Hz, ScalingOpts))
   {
     Console.Print("Duration calculation failed");
 
@@ -88,7 +88,7 @@ TUint_4 FreqsTestSet[NumTestFreqs] =
 
 void TestCalculator(
   TAsciiz CalcName,
-  me_HardwareClockScaling::TClockScalingOptions HwSpec
+  me_HardwareClockScaling::TClockScalingOptions ScalingOpts
 )
 {
   Console.Write("(");
@@ -102,7 +102,7 @@ void TestCalculator(
 
   for (TUint_1 Index = 0; Index < NumTestFreqs; ++Index)
   {
-    TestFreq(FreqsTestSet[Index], HwSpec);
+    TestFreq(FreqsTestSet[Index], ScalingOpts);
     Console.Print("");
   }
 

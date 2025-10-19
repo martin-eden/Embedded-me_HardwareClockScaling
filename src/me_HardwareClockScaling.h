@@ -56,13 +56,13 @@ namespace me_HardwareClockScaling
   struct TClockScalingOptions
   {
     TUint_1 NumPrescalerValues;
-    TUint_1 PrescalerPowsOfTwo[MaxPrescalerValues];
+    TUint_1 Prescales_PowOfTwo[MaxPrescalerValues];
     TUint_1 CounterNumBits;
   };
 
   // Convert frequency to hardware duration
-  TBool CalculateHardwareDuration(
-    TClockScale * HwDur,
+  TBool CalculateClockScale(
+    TClockScale * ClockScale,
     TUint_4 Freq_Hz,
     TClockScalingOptions HwOpts
   );
@@ -70,7 +70,7 @@ namespace me_HardwareClockScaling
   // Convert hardware duration to frequency
   TBool CalculateFrequency(
     TUint_4 * Freq_Hz,
-    TClockScale HwDur
+    TClockScale ClockScale
   );
 }
 

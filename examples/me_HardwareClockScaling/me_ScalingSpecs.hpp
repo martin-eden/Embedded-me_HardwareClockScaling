@@ -65,11 +65,11 @@ me_HardwareClockScaling::TClockScalingOptions me_ScalingSpecs::GetSpec_Counter1(
   me_HardwareClockScaling::TClockScalingOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 5;
-  HwSpec.PrescalerPowsOfTwo[0] = 0;
-  HwSpec.PrescalerPowsOfTwo[1] = 3;
-  HwSpec.PrescalerPowsOfTwo[2] = 6;
-  HwSpec.PrescalerPowsOfTwo[3] = 8;
-  HwSpec.PrescalerPowsOfTwo[4] = 10;
+  HwSpec.Prescales_PowOfTwo[0] = 0;
+  HwSpec.Prescales_PowOfTwo[1] = 3;
+  HwSpec.Prescales_PowOfTwo[2] = 6;
+  HwSpec.Prescales_PowOfTwo[3] = 8;
+  HwSpec.Prescales_PowOfTwo[4] = 10;
 
   HwSpec.CounterNumBits = 8;
 
@@ -84,11 +84,11 @@ me_HardwareClockScaling::TClockScalingOptions me_ScalingSpecs::GetSpec_Counter2(
   me_HardwareClockScaling::TClockScalingOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 5;
-  HwSpec.PrescalerPowsOfTwo[0] = 0;
-  HwSpec.PrescalerPowsOfTwo[1] = 3;
-  HwSpec.PrescalerPowsOfTwo[2] = 6;
-  HwSpec.PrescalerPowsOfTwo[3] = 8;
-  HwSpec.PrescalerPowsOfTwo[4] = 10;
+  HwSpec.Prescales_PowOfTwo[0] = 0;
+  HwSpec.Prescales_PowOfTwo[1] = 3;
+  HwSpec.Prescales_PowOfTwo[2] = 6;
+  HwSpec.Prescales_PowOfTwo[3] = 8;
+  HwSpec.Prescales_PowOfTwo[4] = 10;
 
   HwSpec.CounterNumBits = 16;
 
@@ -103,13 +103,13 @@ me_HardwareClockScaling::TClockScalingOptions me_ScalingSpecs::GetSpec_Counter3(
   me_HardwareClockScaling::TClockScalingOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 7;
-  HwSpec.PrescalerPowsOfTwo[0] = 0;
-  HwSpec.PrescalerPowsOfTwo[1] = 3;
-  HwSpec.PrescalerPowsOfTwo[2] = 5;
-  HwSpec.PrescalerPowsOfTwo[3] = 6;
-  HwSpec.PrescalerPowsOfTwo[4] = 7;
-  HwSpec.PrescalerPowsOfTwo[5] = 8;
-  HwSpec.PrescalerPowsOfTwo[6] = 10;
+  HwSpec.Prescales_PowOfTwo[0] = 0;
+  HwSpec.Prescales_PowOfTwo[1] = 3;
+  HwSpec.Prescales_PowOfTwo[2] = 5;
+  HwSpec.Prescales_PowOfTwo[3] = 6;
+  HwSpec.Prescales_PowOfTwo[4] = 7;
+  HwSpec.Prescales_PowOfTwo[5] = 8;
+  HwSpec.Prescales_PowOfTwo[6] = 10;
 
   HwSpec.CounterNumBits = 8;
 
@@ -124,8 +124,8 @@ me_HardwareClockScaling::TClockScalingOptions me_ScalingSpecs::GetSpec_Uart()
   me_HardwareClockScaling::TClockScalingOptions HwSpec;
 
   HwSpec.NumPrescalerValues = 2;
-  HwSpec.PrescalerPowsOfTwo[0] = 3;
-  HwSpec.PrescalerPowsOfTwo[1] = 4;
+  HwSpec.Prescales_PowOfTwo[0] = 3;
+  HwSpec.Prescales_PowOfTwo[1] = 4;
 
   HwSpec.CounterNumBits = 12;
 
