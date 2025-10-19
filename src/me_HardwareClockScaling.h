@@ -36,7 +36,7 @@
 namespace me_HardwareClockScaling
 {
   /*
-    Clock slowdown and number of clock cycles
+    Clock slowdown factor and number of clock cycles
 
     For number of cycles: 0 means 1, 1 means 2 etc.
   */
@@ -60,18 +60,26 @@ namespace me_HardwareClockScaling
     TUint_1 CounterNumBits;
   };
 
-  // Convert frequency to hardware duration
+  // Convert frequency to clock scale
   TBool CalculateClockScale(
     TClockScale * ClockScale,
     TUint_4 Freq_Hz,
-    TClockScalingOptions HwOpts
+    TClockScalingOptions ScalingOpts
   );
 
-  // Convert hardware duration to frequency
+  // Convert clock scale to frequency
   TBool CalculateFrequency(
     TUint_4 * Freq_Hz,
     TClockScale ClockScale
   );
+
+  namespace AtMega328
+  {
+    TClockScalingOptions GetSpec_Counter1();
+    TClockScalingOptions GetSpec_Counter2();
+    TClockScalingOptions GetSpec_Counter3();
+    TClockScalingOptions GetSpec_Uart();
+  }
 }
 
 /*

@@ -10,16 +10,15 @@
 #include <me_BaseTypes.h>
 #include <me_Console.h>
 #include <me_DebugPrints.h>
-#include "me_ScalingSpecs.hpp" // test data
 
 void PrintHardwareDuration(
-  me_HardwareClockScaling::TClockScale HwDur
+  me_HardwareClockScaling::TClockScale Scale
 )
 {
-  Console.Write("Hardware duration:");
+  Console.Write("Clock scale:");
   Console.Write("(");
-  Console.Print(HwDur.Prescale_PowOfTwo);
-  Console.Print(HwDur.CounterLimit);
+  Console.Print(Scale.Prescale_PowOfTwo);
+  Console.Print(Scale.CounterLimit);
   Console.Write(")");
   Console.EndLine();
 }
@@ -112,22 +111,22 @@ void TestCalculator(
 
 void TestCounter1()
 {
-  TestCalculator("Counter 1", me_ScalingSpecs::GetSpec_Counter1());
+  TestCalculator("Counter 1", me_HardwareClockScaling::AtMega328::GetSpec_Counter1());
 }
 
 void TestCounter2()
 {
-  TestCalculator("Counter 2", me_ScalingSpecs::GetSpec_Counter2());
+  TestCalculator("Counter 2", me_HardwareClockScaling::AtMega328::GetSpec_Counter2());
 }
 
 void TestCounter3()
 {
-  TestCalculator("Counter 3", me_ScalingSpecs::GetSpec_Counter3());
+  TestCalculator("Counter 3", me_HardwareClockScaling::AtMega328::GetSpec_Counter3());
 }
 
 void TestUart()
 {
-  TestCalculator("UART", me_ScalingSpecs::GetSpec_Uart());
+  TestCalculator("UART", me_HardwareClockScaling::AtMega328::GetSpec_Uart());
 }
 
 void RunTest()
