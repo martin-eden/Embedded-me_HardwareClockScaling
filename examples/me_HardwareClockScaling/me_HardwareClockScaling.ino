@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-10-19
+  Last mod.: 2025-10-23
 */
 
 #include <me_HardwareClockScaling.h>
@@ -42,7 +42,7 @@ void TestFreq(
 
   PrintFrequency("Wished frequency (Hz):", Freq_Hz);
 
-  if (!me_HardwareClockScaling::CalculateClockScale(&HwDur, Freq_Hz, ScalingOpts))
+  if (!me_HardwareClockScaling::CalculateClockScale_Specs(&HwDur, Freq_Hz, ScalingOpts))
   {
     Console.Print("Duration calculation failed");
 
