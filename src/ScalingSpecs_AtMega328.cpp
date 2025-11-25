@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-10-19
+  Last mod.: 2025-11-26
 */
 
 #include <me_HardwareClockScaling.h>
@@ -12,7 +12,7 @@ using namespace me_HardwareClockScaling;
 /*
   Return counter 1 specs
 */
-TClockScalingOptions AtMega328::GetSpec_Counter1()
+TClockScalingOptions AtMega328::GetSpecs_Counter1()
 {
   TClockScalingOptions HwSpec;
 
@@ -31,7 +31,7 @@ TClockScalingOptions AtMega328::GetSpec_Counter1()
 /*
   Return counter 2 specs
 */
-TClockScalingOptions AtMega328::GetSpec_Counter2()
+TClockScalingOptions AtMega328::GetSpecs_Counter2()
 {
   TClockScalingOptions HwSpec;
 
@@ -50,7 +50,7 @@ TClockScalingOptions AtMega328::GetSpec_Counter2()
 /*
   Return counter 3 specs
 */
-TClockScalingOptions AtMega328::GetSpec_Counter3()
+TClockScalingOptions AtMega328::GetSpecs_Counter3()
 {
   TClockScalingOptions HwSpec;
 
@@ -71,7 +71,7 @@ TClockScalingOptions AtMega328::GetSpec_Counter3()
 /*
   Return USART module specs
 */
-TClockScalingOptions AtMega328::GetSpec_Uart()
+TClockScalingOptions AtMega328::GetSpecs_Uart()
 {
   TClockScalingOptions HwSpec;
 

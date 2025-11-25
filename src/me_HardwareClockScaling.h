@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-10-22
+  Last mod.: 2025-11-26
 */
 
 #pragma once
@@ -80,10 +80,10 @@ namespace me_HardwareClockScaling
 
   namespace AtMega328
   {
-    TClockScalingOptions GetSpec_Counter1();
-    TClockScalingOptions GetSpec_Counter2();
-    TClockScalingOptions GetSpec_Counter3();
-    TClockScalingOptions GetSpec_Uart();
+    TClockScalingOptions GetSpecs_Counter1();
+    TClockScalingOptions GetSpecs_Counter2();
+    TClockScalingOptions GetSpecs_Counter3();
+    TClockScalingOptions GetSpecs_Uart();
   }
 }
 
