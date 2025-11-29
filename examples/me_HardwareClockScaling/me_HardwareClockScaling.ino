@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-10-23
+  Last mod.: 2025-11-29
 */
 
 #include <me_HardwareClockScaling.h>
@@ -11,7 +11,7 @@
 #include <me_Console.h>
 #include <me_DebugPrints.h>
 
-void PrintHardwareDuration(
+void PrintScaling(
   me_HardwareClockScaling::TClockScale Scale
 )
 {
@@ -32,9 +32,11 @@ void PrintFrequency(
   Console.EndLine();
 }
 
+// ( Testing frequencies calculation
+
 void TestFreq(
   TUint_4 Freq_Hz,
-  me_HardwareClockScaling::TClockScalingOptions ScalingOpts
+  me_HardwareClockScaling::TClockScalingOptions Specs
 )
 {
   me_HardwareClockScaling::TClockScale HwDur;
@@ -42,13 +44,13 @@ void TestFreq(
 
   PrintFrequency("Wished frequency (Hz):", Freq_Hz);
 
-  if (!me_HardwareClockScaling::CalculateClockScale_Specs(&HwDur, Freq_Hz, ScalingOpts))
+  if (!me_HardwareClockScaling::CalculateClockScale_Specs(&HwDur, Freq_Hz, Specs))
   {
     Console.Print("Duration calculation failed");
 
     return;
   }
-  PrintHardwareDuration(HwDur);
+  PrintScaling(HwDur);
 
   if (!me_HardwareClockScaling::CalculateFrequency(&RealFreq_Hz, HwDur))
   {
@@ -60,7 +62,7 @@ void TestFreq(
 }
 
 //*
-// Testing spectrum base
+// Spectrum base
 const TUint_1 NumTestFreqs = 8;
 TUint_4 FreqsTestSet[NumTestFreqs] =
   {
@@ -87,14 +89,14 @@ TUint_4 FreqsTestSet[NumTestFreqs] =
   };
 //*/
 
-void TestCalculator(
+void TestFreqCalculator(
   TAsciiz CalcName,
-  me_HardwareClockScaling::TClockScalingOptions ScalingOpts
+  me_HardwareClockScaling::TClockScalingOptions Specs
 )
 {
   Console.Write("(");
   Console.Write(CalcName);
-  Console.Write("test");
+  Console.Write("frequency calculation test");
   Console.EndLine();
 
   Console.Indent();
@@ -103,7 +105,7 @@ void TestCalculator(
 
   for (TUint_1 Index = 0; Index < NumTestFreqs; ++Index)
   {
-    TestFreq(FreqsTestSet[Index], ScalingOpts);
+    TestFreq(FreqsTestSet[Index], Specs);
     Console.Print("");
   }
 
@@ -111,33 +113,83 @@ void TestCalculator(
   Console.Print(")");
 }
 
-void TestCounter1()
+void RunFreqTest()
 {
-  TestCalculator("Counter 1", me_HardwareClockScaling::AtMega328::GetSpec_Counter1());
+  TestFreqCalculator("Counter 1", me_HardwareClockScaling::AtMega328::GetSpecs_Counter1());
+  TestFreqCalculator("Counter 2", me_HardwareClockScaling::AtMega328::GetSpecs_Counter2());
+  TestFreqCalculator("Counter 3", me_HardwareClockScaling::AtMega328::GetSpecs_Counter3());
+  TestFreqCalculator("UART", me_HardwareClockScaling::AtMega328::GetSpecs_Uart());
 }
 
-void TestCounter2()
+// )
+
+// ( Testing ticks durations
+
+void TestTick(
+  TUint_2 TickDuration_Us,
+  me_HardwareClockScaling::TClockScalingOptions Specs
+)
 {
-  TestCalculator("Counter 2", me_HardwareClockScaling::AtMega328::GetSpec_Counter2());
+  TUint_1 Prescale_PowOfTwo;
+
+  me_DebugPrints::Print("Target tick duration (us)", TickDuration_Us);
+  Console.EndLine();
+
+  if (!me_HardwareClockScaling::PrescaleFromTickDuration_Specs(&Prescale_PowOfTwo, TickDuration_Us, Specs))
+  {
+    Console.Print("Calculating scale for tick duration failed");
+
+    return;
+  }
+
+  me_DebugPrints::Print("Prescale (power of 2):", Prescale_PowOfTwo);
 }
 
-void TestCounter3()
+const TUint_1 NumTestTickDurations = 7;
+TUint_2 TickDurationsTestSet[NumTestTickDurations] =
+  {
+    0,
+    1,
+    3,
+    8,
+    21,
+    55,
+    89
+  };
+
+void TestTickCalculator(
+  TAsciiz CalcName,
+  me_HardwareClockScaling::TClockScalingOptions Specs
+)
 {
-  TestCalculator("Counter 3", me_HardwareClockScaling::AtMega328::GetSpec_Counter3());
+  Console.Write("(");
+  Console.Write(CalcName);
+  Console.Write("tick calculation test");
+  Console.EndLine();
+
+  Console.Indent();
+
+  Console.Print("");
+
+  for (TUint_1 Index = 0; Index < NumTestTickDurations; ++Index)
+  {
+    TestTick(TickDurationsTestSet[Index], Specs);
+    Console.Print("");
+  }
+
+  Console.Unindent();
+  Console.Print(")");
 }
 
-void TestUart()
+void RunTickTest()
 {
-  TestCalculator("UART", me_HardwareClockScaling::AtMega328::GetSpec_Uart());
+  // TestTickCalculator("Counter 1", me_HardwareClockScaling::AtMega328::GetSpecs_Counter1());
+  TestTickCalculator("Counter 2", me_HardwareClockScaling::AtMega328::GetSpecs_Counter2());
+  TestTickCalculator("Counter 3", me_HardwareClockScaling::AtMega328::GetSpecs_Counter3());
+  // TestTickCalculator("UART", me_HardwareClockScaling::AtMega328::GetSpecs_Uart());
 }
 
-void RunTest()
-{
-  TestCounter1();
-  TestCounter2();
-  TestCounter3();
-  TestUart();
-}
+// )
 
 void setup()
 {
@@ -145,7 +197,8 @@ void setup()
 
   Console.Print("[me_HardwareClockScaling] test");
   Console.Indent();
-  RunTest();
+  RunFreqTest();
+  RunTickTest();
   Console.Unindent();
   Console.Print("Done");
 }
@@ -158,4 +211,5 @@ void loop()
   2025-10-15
   2025-10-16
   2025-10-18
+  2025-11-29
 */
