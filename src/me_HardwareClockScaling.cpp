@@ -74,11 +74,8 @@ TBool me_HardwareClockScaling::PrescaleFromTickDuration_Specs(
   if (!Freetown::CheckSpecs(Specs))
     return false;
 
-  Freetown::PrescaleFromTickDuration_Specs(
-    Prescale_Pow2,
-    TickDuration_Us,
-    Specs
-  );
+  *Prescale_Pow2 =
+    Freetown::GetPrescaleFromTickDuration_Specs(TickDuration_Us, Specs);
 
   return true;
 }

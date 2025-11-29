@@ -194,8 +194,7 @@ static TUint_2 CalcDelta(
 /*
   Find suitable clock scale for desired tick duration (in micros)
 */
-void Freetown::PrescaleFromTickDuration_Specs(
-  TUint_1 * ResultPrescale_Pow2,
+TUint_1 Freetown::GetPrescaleFromTickDuration_Specs(
   TUint_2 TargetTickDuration_us,
   TClockScalingOptions Specs
 )
@@ -230,7 +229,7 @@ void Freetown::PrescaleFromTickDuration_Specs(
   TUint_1 BestIndex;
 
   if (Specs.NumPrescalerValues == 0)
-    return;
+    return 0;
 
   MinDelta = TUint_2_Max;
   PrevDelta = TUint_2_Max;
@@ -257,7 +256,7 @@ void Freetown::PrescaleFromTickDuration_Specs(
     PrevDelta = CurDelta;
   }
 
-  *ResultPrescale_Pow2 = Specs.Prescales_PowOfTwo[BestIndex];
+  return Specs.Prescales_PowOfTwo[BestIndex];
 }
 
 /*

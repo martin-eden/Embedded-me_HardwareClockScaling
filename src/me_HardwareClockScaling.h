@@ -87,7 +87,7 @@ namespace me_HardwareClockScaling
     TBool CalculateClockScale_Spec(TClockScale *, TUint_4, TClockScaleSetting);
     TBool CalculateClockScale_Specs(TClockScale *, TUint_4, TClockScalingOptions);
     TBool CalculateFrequency(TUint_4 *, TClockScale);
-    void PrescaleFromTickDuration_Specs(TUint_1 *, TUint_2, TClockScalingOptions);
+    TUint_1 GetPrescaleFromTickDuration_Specs(TUint_2, TClockScalingOptions);
   }
 
   namespace AtMega328
