@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-11-26
+  Last mod.: 2025-11-29
 */
 
 #pragma once
@@ -48,34 +48,46 @@ namespace me_HardwareClockScaling
 
   // ( Interface functions
 
-  // Convert frequency to clock scale, given limit
+  // Calculate scaling from frequency and scale limits
   TBool CalculateClockScale_Spec(
     TClockScale * ClockScale,
     TUint_4 Freq_Hz,
     TClockScaleSetting ScaleSetting
   );
 
-  // Convert frequency to clock scale, given limits
+  // Calculate scaling from frequency and list of scale limits
   TBool CalculateClockScale_Specs(
     TClockScale * ClockScale,
     TUint_4 Freq_Hz,
     TClockScalingOptions ScalingOpts
   );
 
-  // Convert clock scale to frequency
+  // Calculate frequency from scaling
   TBool CalculateFrequency(
     TUint_4 * Freq_Hz,
     TClockScale ClockScale
   );
 
+  // Find suitable clock scale for desired tick duration (in micros)
+  TBool PrescaleFromTickDuration_Specs(
+    TUint_1 *,
+    TUint_2,
+    TClockScalingOptions
+  );
+
   // )
 
-  // Real implementation without input checks
+  // Real implementation and input checks
   namespace Freetown
   {
+    TBool CheckScaling(TClockScale);
+    TBool CheckSpec(TClockScaleSetting);
+    TBool CheckSpecs(TClockScalingOptions);
+
     TBool CalculateClockScale_Spec(TClockScale *, TUint_4, TClockScaleSetting);
     TBool CalculateClockScale_Specs(TClockScale *, TUint_4, TClockScalingOptions);
     TBool CalculateFrequency(TUint_4 *, TClockScale);
+    void PrescaleFromTickDuration_Specs(TUint_1 *, TUint_2, TClockScalingOptions);
   }
 
   namespace AtMega328
