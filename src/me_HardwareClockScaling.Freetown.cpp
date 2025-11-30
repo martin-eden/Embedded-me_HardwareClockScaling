@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-11-29
+  Last mod.: 2025-11-30
 */
 
 #include <me_HardwareClockScaling.h>
@@ -10,6 +10,17 @@
 using namespace me_HardwareClockScaling;
 
 const TUint_4 ClocksPerSecond = F_CPU;
+
+/*
+  Constant 16
+
+  16 is maximum number of bits in counter value for ATmega328.
+  We can make it named const here but some other functions
+  return TUint_2, implying maximum size of 16 bits.
+
+  So we're not naming it. It does not improve readability and
+  changing it will not change much really.
+*/
 
 /*
   Check scaling
@@ -29,7 +40,7 @@ TBool Freetown::CheckSpec(
 )
 {
   return
-    (Spec.CounterNumBits <= 16) &&
+    ((Spec.CounterNumBits > 0) && (Spec.CounterNumBits <= 16)) &&
     (Spec.Prescale_PowOfTwo <= 16);
 }
 
@@ -260,5 +271,16 @@ TUint_1 Freetown::GetPrescaleFromTickDuration_Specs(
 }
 
 /*
+  Return maximum value counter can hold by spec
+*/
+TUint_2 Freetown::GetMaxCounterValue(
+  TUint_1 CounterWidthInBits
+)
+{
+  return TUint_2_Max >> (16 - CounterWidthInBits);
+}
+
+/*
   2025-11-29
+  2025-11-30
 */

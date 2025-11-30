@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-11-29
+  Last mod.: 2025-11-30
 */
 
 /*
@@ -24,13 +24,13 @@ using namespace me_HardwareClockScaling;
 TBool me_HardwareClockScaling::CalculateClockScale_Spec(
   TClockScale * Scale,
   TUint_4 Freq_Hz,
-  TClockScaleSetting Setting
+  TClockScaleSetting Spec
 )
 {
-  if (!Freetown::CheckSpec(Setting))
+  if (!Freetown::CheckSpec(Spec))
     return false;
 
-  return Freetown::CalculateClockScale_Spec(Scale, Freq_Hz, Setting);
+  return Freetown::CalculateClockScale_Spec(Scale, Freq_Hz, Spec);
 }
 
 /*
@@ -39,13 +39,13 @@ TBool me_HardwareClockScaling::CalculateClockScale_Spec(
 TBool me_HardwareClockScaling::CalculateClockScale_Specs(
   TClockScale * Scale,
   TUint_4 Freq_Hz,
-  TClockScalingOptions ScaleOpts
+  TClockScalingOptions Specs
 )
 {
-  if (!Freetown::CheckSpecs(ScaleOpts))
+  if (!Freetown::CheckSpecs(Specs))
     return false;
 
-  return Freetown::CalculateClockScale_Specs(Scale, Freq_Hz, ScaleOpts);
+  return Freetown::CalculateClockScale_Specs(Scale, Freq_Hz, Specs);
 }
 
 /*
@@ -76,6 +76,23 @@ TBool me_HardwareClockScaling::PrescaleFromTickDuration_Specs(
 
   *Prescale_Pow2 =
     Freetown::GetPrescaleFromTickDuration_Specs(TickDuration_Us, Specs);
+
+  return true;
+}
+
+/*
+  Set counter value to max allowed by spec
+*/
+TBool me_HardwareClockScaling::SetMaxCounterValue(
+  TClockScale * Scale,
+  TClockScaleSetting Spec
+)
+{
+  if (!Freetown::CheckSpec(Spec))
+    return false;
+
+  Scale->CounterLimit = Freetown::GetMaxCounterValue(Spec.CounterNumBits);
+  Scale->Prescale_PowOfTwo = Spec.Prescale_PowOfTwo;
 
   return true;
 }

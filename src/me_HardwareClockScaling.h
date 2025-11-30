@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-11-29
+  Last mod.: 2025-11-30
 */
 
 #pragma once
@@ -70,9 +70,15 @@ namespace me_HardwareClockScaling
 
   // Find suitable clock scale for desired tick duration (in micros)
   TBool PrescaleFromTickDuration_Specs(
-    TUint_1 *,
-    TUint_2,
-    TClockScalingOptions
+    TUint_1 * Prescale_Pow2,
+    TUint_2 TickDuration_Us,
+    TClockScalingOptions Specs
+  );
+
+  // Set counter value to max allowed by spec
+  TBool SetMaxCounterValue(
+    TClockScale * Scale,
+    TClockScaleSetting Spec
   );
 
   // )
@@ -88,6 +94,7 @@ namespace me_HardwareClockScaling
     TBool CalculateClockScale_Specs(TClockScale *, TUint_4, TClockScalingOptions);
     TBool CalculateFrequency(TUint_4 *, TClockScale);
     TUint_1 GetPrescaleFromTickDuration_Specs(TUint_2, TClockScalingOptions);
+    TUint_2 GetMaxCounterValue(TUint_1);
   }
 
   namespace AtMega328
@@ -104,4 +111,5 @@ namespace me_HardwareClockScaling
   2025-10-16
   2025-10-18
   2025-10-21
+  2025-11-30
 */
