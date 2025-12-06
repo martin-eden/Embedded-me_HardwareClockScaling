@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-11-26
+  Last mod.: 2025-12-06
 */
 
 #include <me_HardwareClockScaling.h>
@@ -14,18 +14,12 @@ using namespace me_HardwareClockScaling;
 */
 TClockScalingOptions AtMega328::GetSpecs_Counter1()
 {
-  TClockScalingOptions HwSpec;
-
-  HwSpec.NumPrescalerValues = 5;
-  HwSpec.Prescales_PowOfTwo[0] = 0;
-  HwSpec.Prescales_PowOfTwo[1] = 3;
-  HwSpec.Prescales_PowOfTwo[2] = 6;
-  HwSpec.Prescales_PowOfTwo[3] = 8;
-  HwSpec.Prescales_PowOfTwo[4] = 10;
-
-  HwSpec.CounterNumBits = 8;
-
-  return HwSpec;
+  return
+    {
+      .NumPrescalerValues = 5,
+      .Prescales_PowOfTwo = { 0, 3, 6, 8, 10 },
+      .CounterNumBits = 8,
+    };
 }
 
 /*
@@ -33,18 +27,12 @@ TClockScalingOptions AtMega328::GetSpecs_Counter1()
 */
 TClockScalingOptions AtMega328::GetSpecs_Counter2()
 {
-  TClockScalingOptions HwSpec;
-
-  HwSpec.NumPrescalerValues = 5;
-  HwSpec.Prescales_PowOfTwo[0] = 0;
-  HwSpec.Prescales_PowOfTwo[1] = 3;
-  HwSpec.Prescales_PowOfTwo[2] = 6;
-  HwSpec.Prescales_PowOfTwo[3] = 8;
-  HwSpec.Prescales_PowOfTwo[4] = 10;
-
-  HwSpec.CounterNumBits = 16;
-
-  return HwSpec;
+  return
+    {
+      .NumPrescalerValues = 5,
+      .Prescales_PowOfTwo = { 0, 3, 6, 8, 10 },
+      .CounterNumBits = 16,
+    };
 }
 
 /*
@@ -52,20 +40,12 @@ TClockScalingOptions AtMega328::GetSpecs_Counter2()
 */
 TClockScalingOptions AtMega328::GetSpecs_Counter3()
 {
-  TClockScalingOptions HwSpec;
-
-  HwSpec.NumPrescalerValues = 7;
-  HwSpec.Prescales_PowOfTwo[0] = 0;
-  HwSpec.Prescales_PowOfTwo[1] = 3;
-  HwSpec.Prescales_PowOfTwo[2] = 5;
-  HwSpec.Prescales_PowOfTwo[3] = 6;
-  HwSpec.Prescales_PowOfTwo[4] = 7;
-  HwSpec.Prescales_PowOfTwo[5] = 8;
-  HwSpec.Prescales_PowOfTwo[6] = 10;
-
-  HwSpec.CounterNumBits = 8;
-
-  return HwSpec;
+  return
+    {
+      .NumPrescalerValues = 7,
+      .Prescales_PowOfTwo = { 0, 3, 5, 6, 7, 8, 10 },
+      .CounterNumBits = 8,
+    };
 }
 
 /*
@@ -73,17 +53,15 @@ TClockScalingOptions AtMega328::GetSpecs_Counter3()
 */
 TClockScalingOptions AtMega328::GetSpecs_Uart()
 {
-  TClockScalingOptions HwSpec;
-
-  HwSpec.NumPrescalerValues = 2;
-  HwSpec.Prescales_PowOfTwo[0] = 3;
-  HwSpec.Prescales_PowOfTwo[1] = 4;
-
-  HwSpec.CounterNumBits = 12;
-
-  return HwSpec;
+  return
+    {
+      .NumPrescalerValues = 2,
+      .Prescales_PowOfTwo = { 3, 4 },
+      .CounterNumBits = 12,
+    };
 }
 
 /*
   2025-10-18
+  2025-12-06
 */
