@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-11-30
+  Last mod.: 2025-12-08
 */
 
 #pragma once
@@ -21,6 +21,8 @@ namespace me_HardwareClockScaling
     TUint_1 Prescale_PowOfTwo;
     TUint_2 CounterLimit;
   };
+
+  typedef TClockScale THardwareDuration;
 
   /*
     Clock slowdown limits: slowdown factor and maximum counter value
