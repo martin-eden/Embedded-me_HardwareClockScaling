@@ -5,6 +5,13 @@
   Last mod.: 2025-12-08
 */
 
+/*
+  This module is used differently
+
+  [me_Uart] and [me_RunTime] use it to get hardware duration.
+  [me_DigitalSignalRecorder] use it to get software duration.
+*/
+
 #pragma once
 
 #include <me_BaseTypes.h>
