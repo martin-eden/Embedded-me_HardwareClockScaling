@@ -9,7 +9,7 @@
 
 using namespace me_HardwareClockScaling;
 
-const TUint_4 ClocksPerSecond = F_CPU;
+const TUint_4 BaseFreq_Hz = F_CPU;
 
 /*
   Constant 16
@@ -100,34 +100,34 @@ static TBool GetNumUnitsForLength(
   Calculate scaling from frequency and scale limits
 */
 TBool Freetown::CalculateClockScale_Spec(
-  THardwareDuration * Scale,
+  THardwareDuration * HwDur,
   TUint_4 Freq_Hz,
   TClockScaleSetting Setting
 )
 {
-  TUint_4 CounterMaxValue;
-  TUint_4 ClockSlowdown;
-  TUint_4 ScaledFreq;
-  TUint_4 Scale_BaseOne;
+  TUint_4 Prescale;
+  TUint_4 ScaledFreq_Hz;
+  TUint_4 Scale;
+  TUint_4 MaxScale;
 
-  CounterMaxValue = (1L << Setting.ScaleSize_NumBits);
+  Prescale = (1L << Setting.Prescale_PowOfTwo);
 
-  ClockSlowdown = (1L << Setting.Prescale_PowOfTwo);
-
-  if (!GetNumUnitsForLength(&ScaledFreq, ClocksPerSecond, ClockSlowdown))
+  if (!GetNumUnitsForLength(&ScaledFreq_Hz, BaseFreq_Hz, Prescale))
     return false;
 
-  if (!GetNumUnitsForLength(&Scale_BaseOne, ScaledFreq, Freq_Hz))
+  if (!GetNumUnitsForLength(&Scale, ScaledFreq_Hz, Freq_Hz))
     return false;
 
-  if (Scale_BaseOne == 0)
+  if (Scale == 0)
     return false;
 
-  if (Scale_BaseOne > CounterMaxValue)
+  MaxScale = (1L << Setting.ScaleSize_NumBits);
+
+  if (Scale > MaxScale)
     return false;
 
-  Scale->Prescale_PowOfTwo = Setting.Prescale_PowOfTwo;
-  Scale->Scale_BaseOne = Scale_BaseOne - 1;
+  HwDur->Prescale_PowOfTwo = Setting.Prescale_PowOfTwo;
+  HwDur->Scale_BaseOne = Scale - 1;
 
   return true;
 }
@@ -136,7 +136,7 @@ TBool Freetown::CalculateClockScale_Spec(
   Calculate scaling from frequency and list of scale limits
 */
 TBool Freetown::CalculateClockScale_Specs(
-  THardwareDuration * Scale,
+  THardwareDuration * HwDur,
   TUint_4 Freq_Hz,
   TClockScalingOptions Specs
 )
@@ -150,7 +150,7 @@ TBool Freetown::CalculateClockScale_Specs(
   {
     Setting.Prescale_PowOfTwo = Specs.Prescales_PowOfTwo[Index];
 
-    if (Freetown::CalculateClockScale_Spec(Scale, Freq_Hz, Setting))
+    if (Freetown::CalculateClockScale_Spec(HwDur, Freq_Hz, Setting))
       return true;
   }
 
@@ -162,21 +162,21 @@ TBool Freetown::CalculateClockScale_Specs(
 */
 TBool Freetown::CalculateFrequency(
   TUint_4 * Freq_Hz,
-  THardwareDuration Scale
+  THardwareDuration HwDur
 )
 {
-  TUint_4 ScaledFreq;
-  TUint_4 ClockSlowdown;
-  TUint_4 CounterLimit;
+  TUint_4 ScaledFreq_Hz;
+  TUint_4 Prescale;
+  TUint_4 Scale;
 
-  ClockSlowdown = (1L << Scale.Prescale_PowOfTwo);
+  Prescale = (1L << HwDur.Prescale_PowOfTwo);
 
-  if (!GetNumUnitsForLength(&ScaledFreq, ClocksPerSecond, ClockSlowdown))
+  if (!GetNumUnitsForLength(&ScaledFreq_Hz, BaseFreq_Hz, Prescale))
     return false;
 
-  CounterLimit = (TUint_4) Scale.Scale_BaseOne + 1;
+  Scale = (TUint_4) HwDur.Scale_BaseOne + 1;
 
-  if (!GetNumUnitsForLength(Freq_Hz, ScaledFreq, CounterLimit))
+  if (!GetNumUnitsForLength(Freq_Hz, ScaledFreq_Hz, Scale))
     return false;
 
   return true;
@@ -187,7 +187,7 @@ static TUint_2 CalcTickDuration_us(
   TUint_1 Prescale_PowOfTwo
 )
 {
-  return 1000000 / (ClocksPerSecond >> Prescale_PowOfTwo);
+  return 1000000 / (BaseFreq_Hz >> Prescale_PowOfTwo);
 }
 
 // [Internal] Return distance between two unsigned integers
@@ -283,4 +283,5 @@ TUint_2 Freetown::GetMaxCounterValue(
 /*
   2025-11-29
   2025-11-30
+  2025-12-14
 */
