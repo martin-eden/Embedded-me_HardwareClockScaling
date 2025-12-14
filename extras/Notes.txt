@@ -66,4 +66,14 @@
 
   And to store number of time granules another integer is used.
   For UART it's 10-bit int, for counters it's 8- or 16-bit.
+
+  ( 2025-12-14
+
+    This is floating point-format
+
+    NumTidks = NumUnits * 2^Prescale
+
+    <NumUnits> is 1-base value in byte (or in word for counter 2)
+    <Prescale> is one of up to 7 available values: 0, 3, 5, 6, 7, 8, 10
+  )
 )
