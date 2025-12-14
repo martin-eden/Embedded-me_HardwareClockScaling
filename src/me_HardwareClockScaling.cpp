@@ -34,10 +34,7 @@ TBool me_HardwareClockScaling::CalculateHardwareDuration(
 
   return
     Freetown::CalculateHardwareDuration(
-      HwDur,
-      Freq_Hz,
-      Prescale_PowOfTwo,
-      ScaleSize_NumBits
+      HwDur, Freq_Hz, Prescale_PowOfTwo, ScaleSize_NumBits
     );
 }
 

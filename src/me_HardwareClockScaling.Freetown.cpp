@@ -160,10 +160,7 @@ TBool Freetown::CalculateClockScale_Specs(
 
     if (
       Freetown::CalculateHardwareDuration(
-        HwDur,
-        Freq_Hz,
-        Prescale_PowOfTwo,
-        ScaleSize_NumBits
+        HwDur, Freq_Hz, Prescale_PowOfTwo, ScaleSize_NumBits
       )
     )
       return true;
