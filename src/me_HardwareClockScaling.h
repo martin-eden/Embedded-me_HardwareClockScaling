@@ -33,17 +33,17 @@
 namespace me_HardwareClockScaling
 {
   /*
-    Clock slowdown: slowdown factor and counter value
+    System clock slowdown: factor and scale
 
-    For number of cycles: 0 means 1, 1 means 2 etc.
+    You can think of this as floating-point number.
+
+    Factor is 1-based number stored from zero (0 means 1).
   */
-  struct TClockScale
+  struct THardwareDuration
   {
     TUint_1 Prescale_PowOfTwo;
     TUint_2 CounterLimit;
   };
-
-  typedef TClockScale THardwareDuration;
 
   /*
     Clock slowdown limits: slowdown factor and maximum counter value
@@ -73,14 +73,14 @@ namespace me_HardwareClockScaling
 
   // Calculate scaling from frequency and scale limits
   TBool CalculateClockScale_Spec(
-    TClockScale * ClockScale,
+    THardwareDuration * ClockScale,
     TUint_4 Freq_Hz,
     TClockScaleSetting ScaleSetting
   );
 
   // Calculate scaling from frequency and list of scale limits
   TBool CalculateClockScale_Specs(
-    TClockScale * ClockScale,
+    THardwareDuration * ClockScale,
     TUint_4 Freq_Hz,
     TClockScalingOptions ScalingOpts
   );
@@ -88,7 +88,7 @@ namespace me_HardwareClockScaling
   // Calculate frequency from scaling
   TBool CalculateFrequency(
     TUint_4 * Freq_Hz,
-    TClockScale ClockScale
+    THardwareDuration ClockScale
   );
 
   // Find suitable clock scale for desired tick duration (in micros)
@@ -100,7 +100,7 @@ namespace me_HardwareClockScaling
 
   // Set counter value to max allowed by spec
   TBool SetMaxCounterValue(
-    TClockScale * Scale,
+    THardwareDuration * Scale,
     TClockScaleSetting Spec
   );
 
@@ -126,13 +126,13 @@ namespace me_HardwareClockScaling
   // Real implementation and input checks
   namespace Freetown
   {
-    TBool CheckScaling(TClockScale);
+    TBool CheckScaling(THardwareDuration);
     TBool CheckSpec(TClockScaleSetting);
     TBool CheckSpecs(TClockScalingOptions);
 
-    TBool CalculateClockScale_Spec(TClockScale *, TUint_4, TClockScaleSetting);
-    TBool CalculateClockScale_Specs(TClockScale *, TUint_4, TClockScalingOptions);
-    TBool CalculateFrequency(TUint_4 *, TClockScale);
+    TBool CalculateClockScale_Spec(THardwareDuration *, TUint_4, TClockScaleSetting);
+    TBool CalculateClockScale_Specs(THardwareDuration *, TUint_4, TClockScalingOptions);
+    TBool CalculateFrequency(TUint_4 *, THardwareDuration);
     TUint_1 GetPrescaleFromTickDuration_Specs(TUint_2, TClockScalingOptions);
     TUint_2 GetMaxCounterValue(TUint_1);
   }

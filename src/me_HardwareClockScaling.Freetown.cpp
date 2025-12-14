@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-11-30
+  Last mod.: 2025-12-14
 */
 
 #include <me_HardwareClockScaling.h>
@@ -26,7 +26,7 @@ const TUint_4 ClocksPerSecond = F_CPU;
   Check scaling
 */
 TBool Freetown::CheckScaling(
-  TClockScale Scaling
+  THardwareDuration Scaling
 )
 {
   return (Scaling.Prescale_PowOfTwo <= 16);
@@ -100,7 +100,7 @@ static TBool GetNumUnitsForLength(
   Calculate scaling from frequency and scale limits
 */
 TBool Freetown::CalculateClockScale_Spec(
-  TClockScale * Scale,
+  THardwareDuration * Scale,
   TUint_4 Freq_Hz,
   TClockScaleSetting Setting
 )
@@ -136,7 +136,7 @@ TBool Freetown::CalculateClockScale_Spec(
   Calculate scaling from frequency and list of scale limits
 */
 TBool Freetown::CalculateClockScale_Specs(
-  TClockScale * Scale,
+  THardwareDuration * Scale,
   TUint_4 Freq_Hz,
   TClockScalingOptions Specs
 )
@@ -162,7 +162,7 @@ TBool Freetown::CalculateClockScale_Specs(
 */
 TBool Freetown::CalculateFrequency(
   TUint_4 * Freq_Hz,
-  TClockScale Scale
+  THardwareDuration Scale
 )
 {
   TUint_4 ScaledFreq;

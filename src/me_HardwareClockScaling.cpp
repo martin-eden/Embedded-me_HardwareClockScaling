@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-11-30
+  Last mod.: 2025-12-14
 */
 
 /*
@@ -22,7 +22,7 @@ using namespace me_HardwareClockScaling;
   Calculate scaling from frequency and scale limits
 */
 TBool me_HardwareClockScaling::CalculateClockScale_Spec(
-  TClockScale * Scale,
+  THardwareDuration * Scale,
   TUint_4 Freq_Hz,
   TClockScaleSetting Spec
 )
@@ -37,7 +37,7 @@ TBool me_HardwareClockScaling::CalculateClockScale_Spec(
   Calculate scaling from frequency and list of scale limits
 */
 TBool me_HardwareClockScaling::CalculateClockScale_Specs(
-  TClockScale * Scale,
+  THardwareDuration * Scale,
   TUint_4 Freq_Hz,
   TClockScalingOptions Specs
 )
@@ -53,7 +53,7 @@ TBool me_HardwareClockScaling::CalculateClockScale_Specs(
 */
 TBool me_HardwareClockScaling::CalculateFrequency(
   TUint_4 * Freq_Hz,
-  TClockScale Scale
+  THardwareDuration Scale
 )
 {
   if (!Freetown::CheckScaling(Scale))
@@ -84,7 +84,7 @@ TBool me_HardwareClockScaling::PrescaleFromTickDuration_Specs(
   Set counter value to max allowed by spec
 */
 TBool me_HardwareClockScaling::SetMaxCounterValue(
-  TClockScale * Scale,
+  THardwareDuration * Scale,
   TClockScaleSetting Spec
 )
 {

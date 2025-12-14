@@ -12,7 +12,7 @@
 #include <me_DebugPrints.h>
 
 void PrintScaling(
-  me_HardwareClockScaling::TClockScale Scale
+  me_HardwareClockScaling::THardwareDuration Scale
 )
 {
   Console.Write("Clock scale:");
@@ -39,7 +39,7 @@ void TestFreq(
   me_HardwareClockScaling::TClockScalingOptions Specs
 )
 {
-  me_HardwareClockScaling::TClockScale HwDur;
+  me_HardwareClockScaling::THardwareDuration HwDur;
   TUint_4 RealFreq_Hz;
 
   PrintFrequency("Wished frequency (Hz):", Freq_Hz);
