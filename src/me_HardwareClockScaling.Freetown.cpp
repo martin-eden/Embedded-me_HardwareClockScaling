@@ -33,15 +33,16 @@ TBool Freetown::CheckScaling(
 }
 
 /*
-  Check hardware setting
+  Check hardware duration limits
 */
 TBool Freetown::CheckSpec(
-  TClockScaleSetting Spec
+  TUint_1 Prescale_PowOfTwo,
+  TUint_1 ScaleSize_NumBits
 )
 {
   return
-    ((Spec.ScaleSize_NumBits > 0) && (Spec.ScaleSize_NumBits <= 16)) &&
-    (Spec.Prescale_PowOfTwo <= 16);
+    (Prescale_PowOfTwo <= 16) &&
+    ((ScaleSize_NumBits > 0) && (ScaleSize_NumBits <= 16));
 }
 
 /*
@@ -51,21 +52,23 @@ TBool Freetown::CheckSpecs(
   TClockScalingOptions Specs
 )
 {
-  TClockScaleSetting Spec;
+  TUint_1 Prescale_PowOfTwo;
+  TUint_1 ScaleSize_NumBits;
   TUint_1 Index;
 
   if (Specs.NumPrescalerValues == 0)
     return false;
 
-  Spec.ScaleSize_NumBits = Specs.ScaleSize_NumBits;
+  ScaleSize_NumBits = Specs.ScaleSize_NumBits;
 
   for (Index = 0; Index < Specs.NumPrescalerValues; ++Index)
   {
-    Spec.Prescale_PowOfTwo = Specs.Prescales_PowOfTwo[Index];
+    Prescale_PowOfTwo = Specs.Prescales_PowOfTwo[Index];
 
-    if (!CheckSpec(Spec))
+    if (!CheckSpec(Prescale_PowOfTwo, ScaleSize_NumBits))
       return false;
 
+    // Check for ascending order of prescales
     if (Index > 0)
       if (Specs.Prescales_PowOfTwo[Index] <= Specs.Prescales_PowOfTwo[Index - 1])
         return false;
@@ -97,12 +100,16 @@ static TBool GetNumUnitsForLength(
 }
 
 /*
-  Calculate scaling from frequency and scale limits
+  Calculate hardware duration from frequency and prescale
+
+  Also we need to know result variable size to be sure
+  that our result will satisfy your requirements.
 */
-TBool Freetown::CalculateClockScale_Spec(
+TBool Freetown::CalculateHardwareDuration(
   THardwareDuration * HwDur,
   TUint_4 Freq_Hz,
-  TClockScaleSetting Setting
+  TUint_1 Prescale_PowOfTwo,
+  TUint_1 ScaleSize_NumBits
 )
 {
   TUint_4 Prescale;
@@ -110,7 +117,7 @@ TBool Freetown::CalculateClockScale_Spec(
   TUint_4 Scale;
   TUint_4 MaxScale;
 
-  Prescale = (1L << Setting.Prescale_PowOfTwo);
+  Prescale = (1L << Prescale_PowOfTwo);
 
   if (!GetNumUnitsForLength(&ScaledFreq_Hz, BaseFreq_Hz, Prescale))
     return false;
@@ -121,12 +128,12 @@ TBool Freetown::CalculateClockScale_Spec(
   if (Scale == 0)
     return false;
 
-  MaxScale = (1L << Setting.ScaleSize_NumBits);
+  MaxScale = (1L << ScaleSize_NumBits);
 
   if (Scale > MaxScale)
     return false;
 
-  HwDur->Prescale_PowOfTwo = Setting.Prescale_PowOfTwo;
+  HwDur->Prescale_PowOfTwo = Prescale_PowOfTwo;
   HwDur->Scale_BaseOne = Scale - 1;
 
   return true;
@@ -141,16 +148,24 @@ TBool Freetown::CalculateClockScale_Specs(
   TClockScalingOptions Specs
 )
 {
-  TClockScaleSetting Setting;
+  TUint_1 Prescale_PowOfTwo;
+  TUint_1 ScaleSize_NumBits;
   TUint_1 Index;
 
-  Setting.ScaleSize_NumBits = Specs.ScaleSize_NumBits;
+  ScaleSize_NumBits = Specs.ScaleSize_NumBits;
 
   for (Index = 0; Index < Specs.NumPrescalerValues; ++Index)
   {
-    Setting.Prescale_PowOfTwo = Specs.Prescales_PowOfTwo[Index];
+    Prescale_PowOfTwo = Specs.Prescales_PowOfTwo[Index];
 
-    if (Freetown::CalculateClockScale_Spec(HwDur, Freq_Hz, Setting))
+    if (
+      Freetown::CalculateHardwareDuration(
+        HwDur,
+        Freq_Hz,
+        Prescale_PowOfTwo,
+        ScaleSize_NumBits
+      )
+    )
       return true;
   }
 
@@ -158,15 +173,15 @@ TBool Freetown::CalculateClockScale_Specs(
 }
 
 /*
-  Calculate frequency from scaling
+  Calculate frequency from hardware duration
 */
 TBool Freetown::CalculateFrequency(
   TUint_4 * Freq_Hz,
   THardwareDuration HwDur
 )
 {
-  TUint_4 ScaledFreq_Hz;
   TUint_4 Prescale;
+  TUint_4 ScaledFreq_Hz;
   TUint_4 Scale;
 
   Prescale = (1L << HwDur.Prescale_PowOfTwo);

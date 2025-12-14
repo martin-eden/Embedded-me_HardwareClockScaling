@@ -47,15 +47,6 @@ namespace me_HardwareClockScaling
     TUint_2 Scale_BaseOne;
   };
 
-  /*
-    Clock slowdown limits: slowdown factor and counter size in bits
-  */
-  struct TClockScaleSetting
-  {
-    TUint_1 Prescale_PowOfTwo;
-    TUint_1 ScaleSize_NumBits;
-  };
-
   const TUint_1 MaxPrescalerValues = 7;
 
   /*
@@ -72,11 +63,12 @@ namespace me_HardwareClockScaling
 
   // ( Interface functions
 
-  // Calculate scaling from frequency and scale limits
-  TBool CalculateClockScale_Spec(
+  // Calculate hardware duration from frequency and scale limits
+  TBool CalculateHardwareDuration(
     THardwareDuration * ClockScale,
     TUint_4 Freq_Hz,
-    TClockScaleSetting ScaleSetting
+    TUint_1 Prescale_PowOfTwo,
+    TUint_1 ScaleSize_NumBits
   );
 
   // Calculate scaling from frequency and list of scale limits
@@ -102,7 +94,8 @@ namespace me_HardwareClockScaling
   // Set counter value to max allowed by spec
   TBool SetMaxCounterValue(
     THardwareDuration * Scale,
-    TClockScaleSetting Spec
+    TUint_1 Prescale_PowOfTwo,
+    TUint_1 ScaleSize_NumBits
   );
 
   // ( Imported from [me_TimerTools]
@@ -128,10 +121,15 @@ namespace me_HardwareClockScaling
   namespace Freetown
   {
     TBool CheckScaling(THardwareDuration);
-    TBool CheckSpec(TClockScaleSetting);
+    TBool CheckSpec(TUint_1 Prescale_PowOfTwo, TUint_1 ScaleSize_NumBits);
     TBool CheckSpecs(TClockScalingOptions);
 
-    TBool CalculateClockScale_Spec(THardwareDuration *, TUint_4, TClockScaleSetting);
+    TBool CalculateHardwareDuration(
+      THardwareDuration * HwDur,
+      TUint_4 Freq_Hz,
+      TUint_1 Prescale_PowOfTwo,
+      TUint_1 ScaleSize_NumBits
+    );
     TBool CalculateClockScale_Specs(THardwareDuration *, TUint_4, TClockScalingOptions);
     TBool CalculateFrequency(TUint_4 *, THardwareDuration);
     TUint_1 GetPrescaleFromTickDuration_Specs(TUint_2, TClockScalingOptions);

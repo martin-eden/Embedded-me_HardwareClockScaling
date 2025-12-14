@@ -19,18 +19,26 @@
 using namespace me_HardwareClockScaling;
 
 /*
-  Calculate scaling from frequency and scale limits
+  Calculate hardware duration from from frequency, prescale and
+  result size limit.
 */
-TBool me_HardwareClockScaling::CalculateClockScale_Spec(
-  THardwareDuration * Scale,
+TBool me_HardwareClockScaling::CalculateHardwareDuration(
+  THardwareDuration * HwDur,
   TUint_4 Freq_Hz,
-  TClockScaleSetting Spec
+  TUint_1 Prescale_PowOfTwo,
+  TUint_1 ScaleSize_NumBits
 )
 {
-  if (!Freetown::CheckSpec(Spec))
+  if (!Freetown::CheckSpec(Prescale_PowOfTwo, ScaleSize_NumBits))
     return false;
 
-  return Freetown::CalculateClockScale_Spec(Scale, Freq_Hz, Spec);
+  return
+    Freetown::CalculateHardwareDuration(
+      HwDur,
+      Freq_Hz,
+      Prescale_PowOfTwo,
+      ScaleSize_NumBits
+    );
 }
 
 /*
@@ -85,14 +93,15 @@ TBool me_HardwareClockScaling::PrescaleFromTickDuration_Specs(
 */
 TBool me_HardwareClockScaling::SetMaxCounterValue(
   THardwareDuration * Scale,
-  TClockScaleSetting Spec
+  TUint_1 Prescale_PowOfTwo,
+  TUint_1 ScaleSize_NumBits
 )
 {
-  if (!Freetown::CheckSpec(Spec))
+  if (!Freetown::CheckSpec(Prescale_PowOfTwo, ScaleSize_NumBits))
     return false;
 
-  Scale->Scale_BaseOne = Freetown::GetMaxCounterValue(Spec.ScaleSize_NumBits);
-  Scale->Prescale_PowOfTwo = Spec.Prescale_PowOfTwo;
+  Scale->Scale_BaseOne = Freetown::GetMaxCounterValue(ScaleSize_NumBits);
+  Scale->Prescale_PowOfTwo = Prescale_PowOfTwo;
 
   return true;
 }
