@@ -91,7 +91,7 @@ TBool me_HardwareClockScaling::SetMaxCounterValue(
   if (!Freetown::CheckSpec(Spec))
     return false;
 
-  Scale->CounterLimit = Freetown::GetMaxCounterValue(Spec.CounterNumBits);
+  Scale->CounterLimit = Freetown::GetMaxCounterValue(Spec.ScaleSize_NumBits);
   Scale->Prescale_PowOfTwo = Spec.Prescale_PowOfTwo;
 
   return true;

@@ -33,11 +33,13 @@
 namespace me_HardwareClockScaling
 {
   /*
-    System clock slowdown: factor and scale
+    System clock slowdown: prescale and scale
 
-    You can think of this as floating-point number.
+    You can think of this as floating-point number:
 
-    Factor is 1-based number stored from zero (0 means 1).
+      NumTicks = 2^Prescale * Scale
+
+    <Scale> is 1-based number stored from zero (0 means 1).
   */
   struct THardwareDuration
   {
@@ -46,27 +48,26 @@ namespace me_HardwareClockScaling
   };
 
   /*
-    Clock slowdown limits: slowdown factor and maximum counter value
+    Clock slowdown limits: slowdown factor and counter size in bits
   */
   struct TClockScaleSetting
   {
     TUint_1 Prescale_PowOfTwo;
-    TUint_1 CounterNumBits;
+    TUint_1 ScaleSize_NumBits;
   };
 
   const TUint_1 MaxPrescalerValues = 7;
 
   /*
-    List of clock slowdown limits: slowdown factors and maximum counter
-    value
+    List of clock slowdown limits: slowdown factors and counter size
 
-    Slowdown factors should come in ascending order.
+    Slowdown factors should be in ascending order.
   */
   struct TClockScalingOptions
   {
     TUint_1 NumPrescalerValues;
     TUint_1 Prescales_PowOfTwo[MaxPrescalerValues];
-    TUint_1 CounterNumBits;
+    TUint_1 ScaleSize_NumBits;
   };
 
   // ( Interface functions
@@ -154,4 +155,5 @@ namespace me_HardwareClockScaling
   2025-11-28
   2025-11-30
   2025-12-08
+  2025-12-14
 */

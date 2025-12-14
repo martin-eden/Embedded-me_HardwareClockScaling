@@ -40,7 +40,7 @@ TBool Freetown::CheckSpec(
 )
 {
   return
-    ((Spec.CounterNumBits > 0) && (Spec.CounterNumBits <= 16)) &&
+    ((Spec.ScaleSize_NumBits > 0) && (Spec.ScaleSize_NumBits <= 16)) &&
     (Spec.Prescale_PowOfTwo <= 16);
 }
 
@@ -57,7 +57,7 @@ TBool Freetown::CheckSpecs(
   if (Specs.NumPrescalerValues == 0)
     return false;
 
-  Spec.CounterNumBits = Specs.CounterNumBits;
+  Spec.ScaleSize_NumBits = Specs.ScaleSize_NumBits;
 
   for (Index = 0; Index < Specs.NumPrescalerValues; ++Index)
   {
@@ -110,7 +110,7 @@ TBool Freetown::CalculateClockScale_Spec(
   TUint_4 ScaledFreq;
   TUint_4 CounterLimit;
 
-  CounterMaxValue = (1L << Setting.CounterNumBits);
+  CounterMaxValue = (1L << Setting.ScaleSize_NumBits);
 
   ClockSlowdown = (1L << Setting.Prescale_PowOfTwo);
 
@@ -144,7 +144,7 @@ TBool Freetown::CalculateClockScale_Specs(
   TClockScaleSetting Setting;
   TUint_1 Index;
 
-  Setting.CounterNumBits = Specs.CounterNumBits;
+  Setting.ScaleSize_NumBits = Specs.ScaleSize_NumBits;
 
   for (Index = 0; Index < Specs.NumPrescalerValues; ++Index)
   {

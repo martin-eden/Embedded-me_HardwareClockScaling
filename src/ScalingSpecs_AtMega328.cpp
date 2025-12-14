@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-12-06
+  Last mod.: 2025-12-14
 */
 
 #include <me_HardwareClockScaling.h>
@@ -18,7 +18,7 @@ TClockScalingOptions AtMega328::GetSpecs_Counter1()
     {
       .NumPrescalerValues = 5,
       .Prescales_PowOfTwo = { 0, 3, 6, 8, 10 },
-      .CounterNumBits = 8,
+      .ScaleSize_NumBits = 8,
     };
 }
 
@@ -31,7 +31,7 @@ TClockScalingOptions AtMega328::GetSpecs_Counter2()
     {
       .NumPrescalerValues = 5,
       .Prescales_PowOfTwo = { 0, 3, 6, 8, 10 },
-      .CounterNumBits = 16,
+      .ScaleSize_NumBits = 16,
     };
 }
 
@@ -44,7 +44,7 @@ TClockScalingOptions AtMega328::GetSpecs_Counter3()
     {
       .NumPrescalerValues = 7,
       .Prescales_PowOfTwo = { 0, 3, 5, 6, 7, 8, 10 },
-      .CounterNumBits = 8,
+      .ScaleSize_NumBits = 8,
     };
 }
 
@@ -57,7 +57,7 @@ TClockScalingOptions AtMega328::GetSpecs_Uart()
     {
       .NumPrescalerValues = 2,
       .Prescales_PowOfTwo = { 3, 4 },
-      .CounterNumBits = 12,
+      .ScaleSize_NumBits = 12,
     };
 }
 
