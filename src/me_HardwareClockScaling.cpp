@@ -91,7 +91,7 @@ TBool me_HardwareClockScaling::SetMaxCounterValue(
   if (!Freetown::CheckSpec(Spec))
     return false;
 
-  Scale->CounterLimit = Freetown::GetMaxCounterValue(Spec.ScaleSize_NumBits);
+  Scale->Scale_BaseOne = Freetown::GetMaxCounterValue(Spec.ScaleSize_NumBits);
   Scale->Prescale_PowOfTwo = Spec.Prescale_PowOfTwo;
 
   return true;
@@ -159,7 +159,7 @@ me_Duration::TDuration me_HardwareClockScaling::HwToSwDuration(
   me_HardwareClockScaling::THardwareDuration HwDur
 )
 {
-  return CounterToDuration(HwDur.CounterLimit, HwDur.Prescale_PowOfTwo);
+  return CounterToDuration(HwDur.Scale_BaseOne, HwDur.Prescale_PowOfTwo);
 }
 
 // )

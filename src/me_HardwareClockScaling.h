@@ -44,7 +44,7 @@ namespace me_HardwareClockScaling
   struct THardwareDuration
   {
     TUint_1 Prescale_PowOfTwo;
-    TUint_2 CounterLimit;
+    TUint_2 Scale_BaseOne;
   };
 
   /*

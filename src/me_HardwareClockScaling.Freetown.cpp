@@ -108,7 +108,7 @@ TBool Freetown::CalculateClockScale_Spec(
   TUint_4 CounterMaxValue;
   TUint_4 ClockSlowdown;
   TUint_4 ScaledFreq;
-  TUint_4 CounterLimit;
+  TUint_4 Scale_BaseOne;
 
   CounterMaxValue = (1L << Setting.ScaleSize_NumBits);
 
@@ -117,17 +117,17 @@ TBool Freetown::CalculateClockScale_Spec(
   if (!GetNumUnitsForLength(&ScaledFreq, ClocksPerSecond, ClockSlowdown))
     return false;
 
-  if (!GetNumUnitsForLength(&CounterLimit, ScaledFreq, Freq_Hz))
+  if (!GetNumUnitsForLength(&Scale_BaseOne, ScaledFreq, Freq_Hz))
     return false;
 
-  if (CounterLimit == 0)
+  if (Scale_BaseOne == 0)
     return false;
 
-  if (CounterLimit > CounterMaxValue)
+  if (Scale_BaseOne > CounterMaxValue)
     return false;
 
   Scale->Prescale_PowOfTwo = Setting.Prescale_PowOfTwo;
-  Scale->CounterLimit = CounterLimit - 1;
+  Scale->Scale_BaseOne = Scale_BaseOne - 1;
 
   return true;
 }
@@ -174,7 +174,7 @@ TBool Freetown::CalculateFrequency(
   if (!GetNumUnitsForLength(&ScaledFreq, ClocksPerSecond, ClockSlowdown))
     return false;
 
-  CounterLimit = (TUint_4) Scale.CounterLimit + 1;
+  CounterLimit = (TUint_4) Scale.Scale_BaseOne + 1;
 
   if (!GetNumUnitsForLength(Freq_Hz, ScaledFreq, CounterLimit))
     return false;

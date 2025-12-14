@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-11-29
+  Last mod.: 2025-12-14
 */
 
 #include <me_HardwareClockScaling.h>
@@ -18,7 +18,7 @@ void PrintScaling(
   Console.Write("Clock scale:");
   Console.Write("(");
   Console.Print(Scale.Prescale_PowOfTwo);
-  Console.Print(Scale.CounterLimit);
+  Console.Print(Scale.Scale_BaseOne);
   Console.Write(")");
   Console.EndLine();
 }
