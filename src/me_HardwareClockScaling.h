@@ -2,7 +2,20 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-12-08
+  Last mod.: 2025-12-14
+*/
+
+/*
+  Scope
+
+  Duration <--> Hardware Duration
+
+  "Duration" is time record, based on one second and base 1000.
+  "Hardware Duration" is.. well, hardware time record, based on
+  number of clock cycles and scaling factor.
+
+  Hardware Duration record used in interface of harder-level modules
+  like UART and RunTime.
 */
 
 /*
