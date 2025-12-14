@@ -97,10 +97,79 @@ TBool me_HardwareClockScaling::SetMaxCounterValue(
   return true;
 }
 
+// ( Imported from [me_TimerTools]
+
+const TUint_1 TicksPerMicroS = F_CPU / 1000000;
+
+me_Duration::TDuration me_HardwareClockScaling::CounterToDuration(
+  TUint_2 Counter,
+  TUint_1 Prescale_PowOfTwo
+)
+{
+  TUint_4 NumTicks;
+  TUint_4 NumMicros;
+  me_Duration::TDuration Result;
+
+  NumTicks = (TUint_4(Counter) + 1) << Prescale_PowOfTwo;
+  NumMicros = NumTicks / TicksPerMicroS;
+
+  me_Duration::MicrosToDuration(&Result, NumMicros);
+
+  return Result;
+}
+
+TBool me_HardwareClockScaling::DurationToCounter(
+  TUint_2 * Counter,
+  me_Duration::TDuration Duration,
+  TUint_1 Prescale_PowOfTwo
+)
+{
+  TUint_4 NumMicros;
+  TUint_4 NumTicks;
+
+  me_Duration::DurationToMicros(&NumMicros, Duration);
+  NumTicks = (NumMicros * TicksPerMicroS) >> Prescale_PowOfTwo;
+
+  if (NumTicks == 0)
+  {
+    *Counter = 0;
+
+    return false;
+  }
+
+  if (NumTicks > TUint_2_Max)
+  {
+    *Counter = TUint_2_Max;
+
+    return false;
+  }
+
+  *Counter = NumTicks - 1;
+
+  return true;
+}
+
+/*
+  Convert duration from hardware to software format
+
+  Hardware duration format is slowdown and counter value.
+  Software format is seconds record scaled by 10^3.
+*/
+me_Duration::TDuration me_HardwareClockScaling::HwToSwDuration(
+  me_HardwareClockScaling::THardwareDuration HwDur
+)
+{
+  return CounterToDuration(HwDur.CounterLimit, HwDur.Prescale_PowOfTwo);
+}
+
+// )
+
 /*
   2025-10-15
   2025-10-16
   2025-10-19
   2025-10-21
+  2025-11-28
   2025-11-29 Calculation for tick, restyling, stand-alone Freetown
+  2025-11-30
 */

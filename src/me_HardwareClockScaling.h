@@ -28,6 +28,7 @@
 #pragma once
 
 #include <me_BaseTypes.h>
+#include <me_Duration.h>
 
 namespace me_HardwareClockScaling
 {
@@ -103,6 +104,23 @@ namespace me_HardwareClockScaling
     TClockScaleSetting Spec
   );
 
+  // ( Imported from [me_TimerTools]
+  me_Duration::TDuration CounterToDuration(
+    TUint_2 Counter,
+    TUint_1 Prescale_PowOfTwo
+  );
+
+  TBool DurationToCounter(
+    TUint_2 * Counter,
+    me_Duration::TDuration,
+    TUint_1 Prescale_PowOfTwo
+  );
+
+  me_Duration::TDuration HwToSwDuration(
+    me_HardwareClockScaling::THardwareDuration
+  );
+  // )
+
   // )
 
   // Real implementation and input checks
@@ -133,5 +151,7 @@ namespace me_HardwareClockScaling
   2025-10-16
   2025-10-18
   2025-10-21
+  2025-11-28
   2025-11-30
+  2025-12-08
 */
