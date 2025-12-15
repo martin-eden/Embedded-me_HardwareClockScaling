@@ -44,7 +44,7 @@ TBool me_HardwareClockScaling::CalculateHardwareDuration(
 TBool me_HardwareClockScaling::CalculateHardwareDuration_Specs(
   THardwareDuration * Scale,
   TUint_4 Freq_Hz,
-  TClockScalingOptions Specs
+  THardwareDurationSpecs Specs
 )
 {
   if (!Freetown::CheckSpecs(Specs))
@@ -70,62 +70,28 @@ TBool me_HardwareClockScaling::CalculateFrequency(
 /*
   Find suitable clock scale for desired tick range (in micros)
 */
-TBool me_HardwareClockScaling::PrescaleFromTickDuration_Specs(
-  TUint_1 * Prescale_Pow2,
+TBool me_HardwareClockScaling::GetPrescaleForTickDuration_Specs(
+  TUint_1 * Prescale_PowOfTwo,
   TUint_2 TickDuration_Us,
-  TClockScalingOptions Specs
+  THardwareDurationSpecs Specs
 )
 {
   if (!Freetown::CheckSpecs(Specs))
     return false;
 
-  *Prescale_Pow2 =
-    Freetown::GetPrescaleFromTickDuration_Specs(TickDuration_Us, Specs);
+  *Prescale_PowOfTwo =
+    Freetown::GetPrescaleForTickDuration_Specs(TickDuration_Us, Specs);
 
   return true;
 }
-
-/*
-  Set counter value to max allowed by spec
-*/
-TBool me_HardwareClockScaling::SetMaxCounterValue(
-  THardwareDuration * Scale,
-  TUint_1 Prescale_PowOfTwo,
-  TUint_1 ScaleSize_NumBits
-)
-{
-  if (!Freetown::CheckSpec(Prescale_PowOfTwo, ScaleSize_NumBits))
-    return false;
-
-  Scale->Scale_BaseOne = Freetown::GetMaxCounterValue(ScaleSize_NumBits);
-  Scale->Prescale_PowOfTwo = Prescale_PowOfTwo;
-
-  return true;
-}
-
-// ( Imported from [me_TimerTools]
 
 const TUint_1 TicksPerMicroS = F_CPU / 1000000;
 
-me_Duration::TDuration me_HardwareClockScaling::CounterToDuration(
-  TUint_2 Counter,
-  TUint_1 Prescale_PowOfTwo
-)
-{
-  TUint_4 NumTicks;
-  TUint_4 NumMicros;
-  me_Duration::TDuration Result;
-
-  NumTicks = (TUint_4(Counter) + 1) << Prescale_PowOfTwo;
-  NumMicros = NumTicks / TicksPerMicroS;
-
-  me_Duration::MicrosToDuration(&Result, NumMicros);
-
-  return Result;
-}
-
-TBool me_HardwareClockScaling::DurationToCounter(
-  TUint_2 * Counter,
+/*
+  [Import] Convert duration from software to hardware format
+*/
+TBool me_HardwareClockScaling::SwToHwDuration(
+  THardwareDuration * HwDur,
   me_Duration::TDuration Duration,
   TUint_1 Prescale_PowOfTwo
 )
@@ -133,42 +99,48 @@ TBool me_HardwareClockScaling::DurationToCounter(
   TUint_4 NumMicros;
   TUint_4 NumTicks;
 
+  HwDur->Prescale_PowOfTwo = Prescale_PowOfTwo;
+
   me_Duration::DurationToMicros(&NumMicros, Duration);
   NumTicks = (NumMicros * TicksPerMicroS) >> Prescale_PowOfTwo;
 
   if (NumTicks == 0)
   {
-    *Counter = 0;
+    HwDur->Scale_BaseOne = 0;
 
     return false;
   }
 
   if (NumTicks > TUint_2_Max)
   {
-    *Counter = TUint_2_Max;
+    HwDur->Scale_BaseOne = TUint_2_Max;
 
     return false;
   }
 
-  *Counter = NumTicks - 1;
+  HwDur->Scale_BaseOne = NumTicks - 1;
 
   return true;
 }
 
 /*
-  Convert duration from hardware to software format
-
-  Hardware duration format is slowdown and counter value.
-  Software format is seconds record scaled by 10^3.
+  [Export] Convert duration from hardware to software format
 */
 me_Duration::TDuration me_HardwareClockScaling::HwToSwDuration(
-  me_HardwareClockScaling::THardwareDuration HwDur
+  THardwareDuration HwDur
 )
 {
-  return CounterToDuration(HwDur.Scale_BaseOne, HwDur.Prescale_PowOfTwo);
-}
+  TUint_4 NumTicks;
+  TUint_4 NumMicros;
+  me_Duration::TDuration Result;
 
-// )
+  NumTicks = (TUint_4(HwDur.Scale_BaseOne) + 1) << HwDur.Prescale_PowOfTwo;
+  NumMicros = NumTicks / TicksPerMicroS;
+
+  me_Duration::MicrosToDuration(&Result, NumMicros);
+
+  return Result;
+}
 
 /*
   2025-10-15
@@ -178,4 +150,5 @@ me_Duration::TDuration me_HardwareClockScaling::HwToSwDuration(
   2025-11-28
   2025-11-29 Calculation for tick, restyling, stand-alone Freetown
   2025-11-30
+  2025-12-14 Review and styling
 */

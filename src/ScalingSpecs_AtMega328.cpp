@@ -12,7 +12,7 @@ using namespace me_HardwareClockScaling;
 /*
   Return counter 1 specs
 */
-TClockScalingOptions AtMega328::GetSpecs_Counter1()
+THardwareDurationSpecs AtMega328::GetSpecs_Counter1()
 {
   return
     {
@@ -25,7 +25,7 @@ TClockScalingOptions AtMega328::GetSpecs_Counter1()
 /*
   Return counter 2 specs
 */
-TClockScalingOptions AtMega328::GetSpecs_Counter2()
+THardwareDurationSpecs AtMega328::GetSpecs_Counter2()
 {
   return
     {
@@ -38,7 +38,7 @@ TClockScalingOptions AtMega328::GetSpecs_Counter2()
 /*
   Return counter 3 specs
 */
-TClockScalingOptions AtMega328::GetSpecs_Counter3()
+THardwareDurationSpecs AtMega328::GetSpecs_Counter3()
 {
   return
     {
@@ -51,7 +51,7 @@ TClockScalingOptions AtMega328::GetSpecs_Counter3()
 /*
   Return USART module specs
 */
-TClockScalingOptions AtMega328::GetSpecs_Uart()
+THardwareDurationSpecs AtMega328::GetSpecs_Uart()
 {
   return
     {

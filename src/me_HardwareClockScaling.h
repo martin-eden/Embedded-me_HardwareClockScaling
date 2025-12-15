@@ -8,14 +8,15 @@
 /*
   Scope
 
-  Duration <--> Hardware Duration
+  Frequency (Hz) <--> Hardware Duration
 
-  "Duration" is time record, based on one second and base 1000.
-  "Hardware Duration" is.. well, hardware time record, based on
-  number of clock cycles and scaling factor.
+  Hardware Duration record used for interface to lower-level modules
+  like UART and Counters. It stores number of system clock cycles.
+  It is stored like number of 2^Prescale granules.
 
-  Hardware Duration record used in interface of harder-level modules
-  like UART and RunTime.
+  We have generic time record Duration. Which is based on one second.
+  It is out of focus of this module but we provide I/O interface for
+  it when required.
 */
 
 /*
@@ -23,6 +24,26 @@
 
   [me_Uart] and [me_RunTime] use it to get hardware duration.
   [me_DigitalSignalRecorder] use it to get software duration.
+*/
+
+/*
+  Design and composition
+
+  Focus is on CalculateHardwareDuration() function. It's simple
+  formula but it accepts hardware-friendly arguments. That's her
+  main point.
+
+  Hardware facilities like counters, UART and watchdogs use counters
+  that can be described as Hardware Duration. They often provide choice
+  from several prescalers and differ in size of number that stores
+  granules. We provide specific datatype for that options.
+  Their options are described in [ScalingSpecs].
+
+  And for that options we have feeder CalculateHardwareDuration_Specs().
+
+  So caller may not know exact options for counter 3 on this
+  microcontroller but still able to provide them from
+  AtMega328::GetSpecs_Counter3().
 */
 
 #pragma once
@@ -47,82 +68,65 @@ namespace me_HardwareClockScaling
     TUint_2 Scale_BaseOne;
   };
 
-  const TUint_1 MaxPrescalerValues = 7;
-
   /*
     List of clock slowdown limits: slowdown factors and counter size
 
     Slowdown factors should be in ascending order.
   */
-  struct TClockScalingOptions
+  const TUint_1 MaxPrescalerValues = 7;
+  struct THardwareDurationSpecs
   {
     TUint_1 NumPrescalerValues;
     TUint_1 Prescales_PowOfTwo[MaxPrescalerValues];
     TUint_1 ScaleSize_NumBits;
   };
 
-  // ( Interface functions
+  // Calculate hardware duration from frequency and scale limit
+  TBool CalculateHardwareDuration(
+    THardwareDuration * HwDur,
+    TUint_4 Freq_Hz,
+    TUint_1 Prescale_PowOfTwo,
+    TUint_1 ScaleSize_NumBits
+  );
 
   // Calculate hardware duration from frequency and scale limits
-  TBool CalculateHardwareDuration(
-    THardwareDuration * ClockScale,
-    TUint_4 Freq_Hz,
-    TUint_1 Prescale_PowOfTwo,
-    TUint_1 ScaleSize_NumBits
-  );
-
-  // Calculate scaling from frequency and list of scale limits
   TBool CalculateHardwareDuration_Specs(
-    THardwareDuration * ClockScale,
+    THardwareDuration * HwDur,
     TUint_4 Freq_Hz,
-    TClockScalingOptions ScalingOpts
+    THardwareDurationSpecs Specs
   );
 
-  // Calculate frequency from scaling
+  // Calculate frequency from hardware duration
   TBool CalculateFrequency(
     TUint_4 * Freq_Hz,
-    THardwareDuration ClockScale
+    THardwareDuration HwDur
   );
 
-  // Find suitable clock scale for desired tick duration (in micros)
-  TBool PrescaleFromTickDuration_Specs(
-    TUint_1 * Prescale_Pow2,
+  // Find suitable prescale for desired tick duration (in micros)
+  TBool GetPrescaleForTickDuration_Specs(
+    TUint_1 * Prescale_PowOfTwo,
     TUint_2 TickDuration_Us,
-    TClockScalingOptions Specs
+    THardwareDurationSpecs Specs
   );
 
-  // Set counter value to max allowed by spec
-  TBool SetMaxCounterValue(
-    THardwareDuration * Scale,
-    TUint_1 Prescale_PowOfTwo,
-    TUint_1 ScaleSize_NumBits
-  );
-
-  // ( Imported from [me_TimerTools]
-  me_Duration::TDuration CounterToDuration(
-    TUint_2 Counter,
-    TUint_1 Prescale_PowOfTwo
-  );
-
-  TBool DurationToCounter(
-    TUint_2 * Counter,
+  // [Import] Generic to hardware duration
+  TBool SwToHwDuration(
+    THardwareDuration * HwDur,
     me_Duration::TDuration,
     TUint_1 Prescale_PowOfTwo
   );
 
+  // [Export] Hardware to generic duration
   me_Duration::TDuration HwToSwDuration(
-    me_HardwareClockScaling::THardwareDuration
+    THardwareDuration
   );
-  // )
-
-  // )
 
   // Real implementation and input checks
   namespace Freetown
   {
     TBool CheckScaling(THardwareDuration);
     TBool CheckSpec(TUint_1 Prescale_PowOfTwo, TUint_1 ScaleSize_NumBits);
-    TBool CheckSpecs(TClockScalingOptions);
+    TBool CheckSpecs(THardwareDurationSpecs);
 
     TBool CalculateHardwareDuration(
       THardwareDuration * HwDur,
@@ -133,19 +137,23 @@ namespace me_HardwareClockScaling
     TBool CalculateHardwareDuration_Specs(
       THardwareDuration *,
       TUint_4 Freq_Hz,
-      TClockScalingOptions Specs
+      THardwareDurationSpecs Specs
     );
     TBool CalculateFrequency(TUint_4 *, THardwareDuration);
-    TUint_1 GetPrescaleFromTickDuration_Specs(TUint_2, TClockScalingOptions);
-    TUint_2 GetMaxCounterValue(TUint_1);
+    TUint_1 GetPrescaleForTickDuration_Specs(TUint_2, THardwareDurationSpecs);
+    TBool SetMaxCounterValue(
+      THardwareDuration * HwDur,
+      TUint_1 Prescale_PowOfTwo,
+      TUint_1 ScaleSize_NumBits
+    );
   }
 
   namespace AtMega328
   {
-    TClockScalingOptions GetSpecs_Counter1();
-    TClockScalingOptions GetSpecs_Counter2();
-    TClockScalingOptions GetSpecs_Counter3();
-    TClockScalingOptions GetSpecs_Uart();
+    THardwareDurationSpecs GetSpecs_Counter1();
+    THardwareDurationSpecs GetSpecs_Counter2();
+    THardwareDurationSpecs GetSpecs_Counter3();
+    THardwareDurationSpecs GetSpecs_Uart();
   }
 }
 

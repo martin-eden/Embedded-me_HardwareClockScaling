@@ -49,7 +49,7 @@ TBool Freetown::CheckSpec(
   Check hardware spec
 */
 TBool Freetown::CheckSpecs(
-  TClockScalingOptions Specs
+  THardwareDurationSpecs Specs
 )
 {
   TUint_1 Prescale_PowOfTwo;
@@ -140,12 +140,12 @@ TBool Freetown::CalculateHardwareDuration(
 }
 
 /*
-  Calculate scaling from frequency and list of scale limits
+  Calculate hardware duration from frequency and list of scale limits
 */
 TBool Freetown::CalculateHardwareDuration_Specs(
   THardwareDuration * HwDur,
   TUint_4 Freq_Hz,
-  TClockScalingOptions Specs
+  THardwareDurationSpecs Specs
 )
 {
   TUint_1 Prescale_PowOfTwo;
@@ -217,22 +217,23 @@ static TUint_2 CalcDelta(
 /*
   Find suitable clock scale for desired tick duration (in micros)
 */
-TUint_1 Freetown::GetPrescaleFromTickDuration_Specs(
+TUint_1 Freetown::GetPrescaleForTickDuration_Specs(
   TUint_2 TargetTickDuration_us,
-  TClockScalingOptions Specs
+  THardwareDurationSpecs Specs
 )
 {
   /*
-    Okay you're building your own timer. In this current case you
-    want to get maximum period (to handle overflows rarely) while
-    keeping reasonable precision.
+    Okay you're building your own timer
 
-    You provides us precision and counter specification:
+    In this case you want to get maximum period (to handle overflows
+    rarely) while keeping reasonable precision.
+
+    You provide us precision (3 micros) and counter specification:
 
       (3 (8 (0 3 5 6 7 8 10)))
 
-    We're converting counter's prescales to tick duration and
-    looking for best match for duration you asked:
+    We're converting counter prescales (assuming maximum period)
+    to duration and look for best match for duration you asked:
 
       0 0 2 4 8 16 64 (us for 16 MHz)
           ^ ^
@@ -280,16 +281,6 @@ TUint_1 Freetown::GetPrescaleFromTickDuration_Specs(
   }
 
   return Specs.Prescales_PowOfTwo[BestIndex];
-}
-
-/*
-  Return maximum value counter can hold by spec
-*/
-TUint_2 Freetown::GetMaxCounterValue(
-  TUint_1 CounterWidthInBits
-)
-{
-  return TUint_2_Max >> (16 - CounterWidthInBits);
 }
 
 /*
