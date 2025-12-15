@@ -36,7 +36,7 @@ void PrintFrequency(
 
 void TestFreq(
   TUint_4 Freq_Hz,
-  me_HardwareClockScaling::TClockScalingOptions Specs
+  me_HardwareClockScaling::THardwareDurationSpecs Specs
 )
 {
   me_HardwareClockScaling::THardwareDuration HwDur;
@@ -63,7 +63,7 @@ void TestFreq(
   PrintFrequency("Real frequency (Hz):", RealFreq_Hz);
 }
 
-//*
+/*
 // Spectrum base
 const TUint_1 NumTestFreqs = 8;
 TUint_4 FreqsTestSet[NumTestFreqs] =
@@ -79,11 +79,12 @@ TUint_4 FreqsTestSet[NumTestFreqs] =
   };
 //*/
 
-/*
+//*
 // Demo of non-exact frequencies
-const TUint_1 NumTestFreqs = 4;
+const TUint_1 NumTestFreqs = 5;
 TUint_4 FreqsTestSet[NumTestFreqs] =
   {
+    2600,
     9600,
     31337,
     57600,
@@ -93,7 +94,7 @@ TUint_4 FreqsTestSet[NumTestFreqs] =
 
 void TestFreqCalculator(
   TAsciiz CalcName,
-  me_HardwareClockScaling::TClockScalingOptions Specs
+  me_HardwareClockScaling::THardwareDurationSpecs Specs
 )
 {
   Console.Write("(");
@@ -129,7 +130,7 @@ void RunFreqTest()
 
 void TestTick(
   TUint_2 TickDuration_Us,
-  me_HardwareClockScaling::TClockScalingOptions Specs
+  me_HardwareClockScaling::THardwareDurationSpecs Specs
 )
 {
   TUint_1 Prescale_PowOfTwo;
@@ -137,9 +138,13 @@ void TestTick(
   me_DebugPrints::Print("Target tick duration (us)", TickDuration_Us);
   Console.EndLine();
 
-  if (!me_HardwareClockScaling::PrescaleFromTickDuration_Specs(&Prescale_PowOfTwo, TickDuration_Us, Specs))
+  if (
+    !me_HardwareClockScaling::GetPrescaleForTickDuration_Specs(
+      &Prescale_PowOfTwo, TickDuration_Us, Specs
+    )
+  )
   {
-    Console.Print("Calculating scale for tick duration failed");
+    Console.Print("Failed to calculate prescale for tick duration");
 
     return;
   }
@@ -161,7 +166,7 @@ TUint_2 TickDurationsTestSet[NumTestTickDurations] =
 
 void TestTickCalculator(
   TAsciiz CalcName,
-  me_HardwareClockScaling::TClockScalingOptions Specs
+  me_HardwareClockScaling::THardwareDurationSpecs Specs
 )
 {
   Console.Write("(");
@@ -214,4 +219,5 @@ void loop()
   2025-10-16
   2025-10-18
   2025-11-29
+  2025-12-14
 */

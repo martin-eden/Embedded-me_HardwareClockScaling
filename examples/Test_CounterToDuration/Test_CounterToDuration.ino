@@ -2,7 +2,11 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-12-14
+  Last mod.: 2025-12-15
+*/
+
+/*
+  Note to myself - merge/rework. Also print prescales.
 */
 
 #include <me_HardwareClockScaling.h>
@@ -17,11 +21,15 @@ void Test_CounterToDuration(
   TUint_1 Prescale_PowOfTwo
 )
 {
+  me_HardwareClockScaling::THardwareDuration HwDur;
   me_Duration::TDuration Duration;
 
   me_DebugPrints::Print("Counter", Counter);
 
-  Duration = me_HardwareClockScaling::CounterToDuration(Counter, Prescale_PowOfTwo);
+  HwDur.Prescale_PowOfTwo = Prescale_PowOfTwo;
+  HwDur.Scale_BaseOne = Counter;
+
+  Duration = me_HardwareClockScaling::HwToSwDuration(HwDur);
 
   Console.Write("Duration");
   me_DebugPrints::PrintDuration(Duration);
@@ -35,16 +43,16 @@ void Test_DurationToCounter(
   TUint_1 Prescale_PowOfTwo
 )
 {
-  TUint_2 Counter;
+  me_HardwareClockScaling::THardwareDuration HwDur;
 
   Console.Write("Duration");
   me_DebugPrints::PrintDuration(Duration);
   Console.EndLine();
 
-  if (!me_HardwareClockScaling::DurationToCounter(&Counter, Duration, Prescale_PowOfTwo))
+  if (!me_HardwareClockScaling::SwToHwDuration(&HwDur, Duration, Prescale_PowOfTwo))
     Console.Print("Conversion to counter is capped");
 
-  me_DebugPrints::Print("Counter", Counter);
+  me_DebugPrints::Print("Counter", HwDur.Scale_BaseOne);
 
   Console.Print("");
 }
