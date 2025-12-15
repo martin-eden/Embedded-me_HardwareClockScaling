@@ -41,7 +41,7 @@ TBool me_HardwareClockScaling::CalculateHardwareDuration(
 /*
   Calculate scaling from frequency and list of scale limits
 */
-TBool me_HardwareClockScaling::CalculateClockScale_Specs(
+TBool me_HardwareClockScaling::CalculateHardwareDuration_Specs(
   THardwareDuration * Scale,
   TUint_4 Freq_Hz,
   TClockScalingOptions Specs
@@ -50,7 +50,7 @@ TBool me_HardwareClockScaling::CalculateClockScale_Specs(
   if (!Freetown::CheckSpecs(Specs))
     return false;
 
-  return Freetown::CalculateClockScale_Specs(Scale, Freq_Hz, Specs);
+  return Freetown::CalculateHardwareDuration_Specs(Scale, Freq_Hz, Specs);
 }
 
 /*

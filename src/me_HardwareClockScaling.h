@@ -72,7 +72,7 @@ namespace me_HardwareClockScaling
   );
 
   // Calculate scaling from frequency and list of scale limits
-  TBool CalculateClockScale_Specs(
+  TBool CalculateHardwareDuration_Specs(
     THardwareDuration * ClockScale,
     TUint_4 Freq_Hz,
     TClockScalingOptions ScalingOpts
@@ -130,7 +130,11 @@ namespace me_HardwareClockScaling
       TUint_1 Prescale_PowOfTwo,
       TUint_1 ScaleSize_NumBits
     );
-    TBool CalculateClockScale_Specs(THardwareDuration *, TUint_4, TClockScalingOptions);
+    TBool CalculateHardwareDuration_Specs(
+      THardwareDuration *,
+      TUint_4 Freq_Hz,
+      TClockScalingOptions Specs
+    );
     TBool CalculateFrequency(TUint_4 *, THardwareDuration);
     TUint_1 GetPrescaleFromTickDuration_Specs(TUint_2, TClockScalingOptions);
     TUint_2 GetMaxCounterValue(TUint_1);

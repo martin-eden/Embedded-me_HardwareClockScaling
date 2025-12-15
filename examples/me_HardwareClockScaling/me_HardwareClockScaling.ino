@@ -44,7 +44,9 @@ void TestFreq(
 
   PrintFrequency("Wished frequency (Hz):", Freq_Hz);
 
-  if (!me_HardwareClockScaling::CalculateClockScale_Specs(&HwDur, Freq_Hz, Specs))
+  if (
+    !me_HardwareClockScaling::CalculateHardwareDuration_Specs(&HwDur, Freq_Hz, Specs)
+  )
   {
     Console.Print("Duration calculation failed");
 
