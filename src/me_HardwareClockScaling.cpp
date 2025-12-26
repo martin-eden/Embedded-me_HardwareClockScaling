@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-12-14
+  Last mod.: 2025-12-26
 */
 
 /*
@@ -101,7 +101,7 @@ TBool me_HardwareClockScaling::SwToHwDuration(
 
   HwDur->Prescale_PowOfTwo = Prescale_PowOfTwo;
 
-  me_Duration::DurationToMicros(&NumMicros, Duration);
+  me_Duration::MicrosFromDuration(&NumMicros, Duration);
   NumTicks = (NumMicros * TicksPerMicroS) >> Prescale_PowOfTwo;
 
   if (NumTicks == 0)
@@ -137,7 +137,7 @@ me_Duration::TDuration me_HardwareClockScaling::HwToSwDuration(
   NumTicks = (TUint_4(HwDur.Scale_BaseOne) + 1) << HwDur.Prescale_PowOfTwo;
   NumMicros = NumTicks / TicksPerMicroS;
 
-  me_Duration::MicrosToDuration(&Result, NumMicros);
+  me_Duration::DurationFromMicros(&Result, NumMicros);
 
   return Result;
 }
