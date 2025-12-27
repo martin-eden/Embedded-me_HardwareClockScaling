@@ -88,20 +88,18 @@ TBool me_HardwareClockScaling::GetPrescaleForTickDuration_Specs(
 const TUint_1 TicksPerMicroS = F_CPU / 1000000;
 
 /*
-  [Import] Convert duration from software to hardware format
+  [Import] Convert microseconds to hardware duration
 */
-TBool me_HardwareClockScaling::SwToHwDuration(
+TBool me_HardwareClockScaling::HwDurationFromMicros(
   THardwareDuration * HwDur,
-  me_Duration::TDuration Duration,
+  TUint_4 NumMicros,
   TUint_1 Prescale_PowOfTwo
 )
 {
-  TUint_4 NumMicros;
   TUint_4 NumTicks;
 
   HwDur->Prescale_PowOfTwo = Prescale_PowOfTwo;
 
-  me_Duration::MicrosFromDuration(&NumMicros, Duration);
   NumTicks = (NumMicros * TicksPerMicroS) >> Prescale_PowOfTwo;
 
   if (NumTicks == 0)
@@ -124,22 +122,19 @@ TBool me_HardwareClockScaling::SwToHwDuration(
 }
 
 /*
-  [Export] Convert duration from hardware to software format
+  [Export] Convert hardware duration to number of microseconds
 */
-me_Duration::TDuration me_HardwareClockScaling::HwToSwDuration(
+TUint_4 me_HardwareClockScaling::MicrosFromHwDuration(
   THardwareDuration HwDur
 )
 {
   TUint_4 NumTicks;
   TUint_4 NumMicros;
-  me_Duration::TDuration Result;
 
   NumTicks = (TUint_4(HwDur.Scale_BaseOne) + 1) << HwDur.Prescale_PowOfTwo;
   NumMicros = NumTicks / TicksPerMicroS;
 
-  me_Duration::DurationFromMicros(&Result, NumMicros);
-
-  return Result;
+  return NumMicros;
 }
 
 /*

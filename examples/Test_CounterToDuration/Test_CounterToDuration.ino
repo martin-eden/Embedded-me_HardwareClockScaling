@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-12-15
+  Last mod.: 2025-12-27
 */
 
 /*
@@ -14,7 +14,6 @@
 #include <me_BaseTypes.h>
 #include <me_Console.h>
 #include <me_DebugPrints.h>
-#include <me_Duration.h>
 
 void Test_CounterToDuration(
   TUint_2 Counter,
@@ -22,39 +21,34 @@ void Test_CounterToDuration(
 )
 {
   me_HardwareClockScaling::THardwareDuration HwDur;
-  me_Duration::TDuration Duration;
+  TUint_4 Duration_Us;
 
   me_DebugPrints::Print("Counter", Counter);
 
   HwDur.Prescale_PowOfTwo = Prescale_PowOfTwo;
   HwDur.Scale_BaseOne = Counter;
 
-  Duration = me_HardwareClockScaling::HwToSwDuration(HwDur);
+  Duration_Us = me_HardwareClockScaling::MicrosFromHwDuration(HwDur);
 
-  Console.Write("Duration");
-  me_DebugPrints::PrintDuration(Duration);
+  me_DebugPrints::Print("Duration (us)", Duration_Us);
   Console.EndLine();
-
-  Console.Print("");
 }
 
 void Test_DurationToCounter(
-  me_Duration::TDuration Duration,
+  TUint_4 Duration_Us,
   TUint_1 Prescale_PowOfTwo
 )
 {
   me_HardwareClockScaling::THardwareDuration HwDur;
 
-  Console.Write("Duration");
-  me_DebugPrints::PrintDuration(Duration);
-  Console.EndLine();
+  me_DebugPrints::Print("Duration (us)", Duration_Us);
 
-  if (!me_HardwareClockScaling::SwToHwDuration(&HwDur, Duration, Prescale_PowOfTwo))
-    Console.Print("Conversion to counter is capped");
+  if (!me_HardwareClockScaling::HwDurationFromMicros(&HwDur, Duration_Us, Prescale_PowOfTwo))
+    Console.Write("(Conversion to counter is capped)");
 
   me_DebugPrints::Print("Counter", HwDur.Scale_BaseOne);
 
-  Console.Print("");
+  Console.EndLine();
 }
 
 void Test_CounterToDurations()
@@ -64,6 +58,7 @@ void Test_CounterToDurations()
   Prescale_PowOfTwo = 6;
   Test_CounterToDuration(0, Prescale_PowOfTwo);
   Test_CounterToDuration(1, Prescale_PowOfTwo);
+  Test_CounterToDuration(249, Prescale_PowOfTwo);
   Test_CounterToDuration(32767, Prescale_PowOfTwo);
   Test_CounterToDuration(32768, Prescale_PowOfTwo);
   Test_CounterToDuration(TUint_2_Max, Prescale_PowOfTwo);
@@ -74,11 +69,11 @@ void Test_DurationsToCounter()
   TUint_1 Prescale_PowOfTwo;
 
   Prescale_PowOfTwo = 6;
-  Test_DurationToCounter({0, 0, 0, 0}, Prescale_PowOfTwo);
-  Test_DurationToCounter({0, 0, 0, 1}, Prescale_PowOfTwo);
-  Test_DurationToCounter({0, 0, 1, 0}, Prescale_PowOfTwo);
-  Test_DurationToCounter({0, 1, 0, 0}, Prescale_PowOfTwo);
-  Test_DurationToCounter({1, 0, 0, 0}, Prescale_PowOfTwo);
+  Test_DurationToCounter(0, Prescale_PowOfTwo);
+  Test_DurationToCounter(1, Prescale_PowOfTwo);
+  Test_DurationToCounter(1000, Prescale_PowOfTwo);
+  Test_DurationToCounter(1000000, Prescale_PowOfTwo);
+  Test_DurationToCounter(1000000000, Prescale_PowOfTwo);
 }
 
 void setup()
@@ -98,4 +93,5 @@ void loop()
 /*
   2025-11-28
   2025-11-30
+  2025-12-27
 */

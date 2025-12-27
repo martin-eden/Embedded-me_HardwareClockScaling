@@ -2,7 +2,7 @@
 
 /*
   Author: Martin Eden
-  Last mod.: 2025-12-14
+  Last mod.: 2025-12-27
 */
 
 /*
@@ -49,7 +49,6 @@
 #pragma once
 
 #include <me_BaseTypes.h>
-#include <me_Duration.h>
 
 namespace me_HardwareClockScaling
 {
@@ -109,15 +108,15 @@ namespace me_HardwareClockScaling
     THardwareDurationSpecs Specs
   );
 
-  // [Import] Generic to hardware duration
-  TBool SwToHwDuration(
+  // [Import] Microseconds to hardware duration
+  TBool HwDurationFromMicros(
     THardwareDuration * HwDur,
-    me_Duration::TDuration,
+    TUint_4,
     TUint_1 Prescale_PowOfTwo
   );
 
-  // [Export] Hardware to generic duration
-  me_Duration::TDuration HwToSwDuration(
+  // [Export] Hardware duration to microseconds
+  TUint_4 MicrosFromHwDuration(
     THardwareDuration
   );
 
@@ -166,4 +165,5 @@ namespace me_HardwareClockScaling
   2025-11-30
   2025-12-08
   2025-12-14
+  2025-12-27
 */
